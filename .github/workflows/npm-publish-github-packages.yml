@@ -45,7 +45,7 @@ jobs:
         env:
           DATA_DIR: data
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node monitor/check.mjs
+        run: node gerivan-status/monitor/check.mjs
 
       - name: Publish results to the data branch
         env:
