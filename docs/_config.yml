@@ -1,5 +1,5 @@
-title: "STATUS LIVE GERIVAN"
-description: "Generate Status Web Site sequences"
+title: "LIVE URL STATUS"
+description: "Look up the anatomy of a URL domain in real time"
 theme: jekyll-theme-minimal
 include: [".nojekyll", "*.html", "*.md", "docs/"]
 exclude: ["README.md"]
