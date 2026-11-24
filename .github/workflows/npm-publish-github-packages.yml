@@ -1,7 +1,7 @@
 # gerivan.me — 24/7 DNS & uptime monitor
 # Runs every 15 minutes, checks DNS propagation from 25 locations, HTTPS and
 # TLS certificates, then publishes the results to the "data" branch, where
-# https://gerivan.me/status.html reads them.
+# https://url-status.gerivan.me/ reads them.
 name: DNS monitor
 
 on:
@@ -45,7 +45,7 @@ jobs:
         env:
           DATA_DIR: data
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node gerivan-status/monitor/check.mjs
+        run: node url-status/monitor/check.mjs
 
       - name: Publish results to the data branch
         env:
