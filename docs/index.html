@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-2QYkL14g2nrNuDgdBmtGYUSqdhGjssjfQGU6rgjmyR8='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-j8wZ9LNcToGV5AOLfGQdYd7r2s5gJFCutlh/6HnrC4o='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <!-- 24/7 monitor data published by the url-status repository (https://url-status.gerivan.me/) (GitHub Actions). Edit this URL if you rename the repo. -->
 <meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/url-status/data/">
@@ -745,6 +745,7 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     { id: 'entropy',      color: '#00ffd5' },
     { id: 'transformers', color: '#ff8a00' },
     { id: 'xphrase',      color: '#ff00aa' },
+    { id: 'url-status',   color: '#ffcc00' },
   ].map(f => ({ ...f, host: `${f.id}.${FLEET_ZONE}` }));
   const STATE_COLOR = { ok: 'var(--ok)', drift: 'var(--warn)', bad: 'var(--bad)', none: 'var(--none)', down: 'var(--down)', pending: 'var(--pending)' };
 
@@ -1161,9 +1162,10 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     renderFleet(); renderWatch();
   }
 
-  // four-segment ring: one quadrant per subdomain, clockwise from 12 o'clock
+  // ring with one segment per subdomain, clockwise from 12 o'clock (adapts to the size of FLEET)
   const arc = (i, r) => {
-    const a0 = (-90 + i * 90 + 7) * Math.PI / 180, a1 = (-90 + (i + 1) * 90 - 7) * Math.PI / 180;
+    const step = 360 / FLEET.length, gap = Math.min(7, step * 0.08);
+    const a0 = (-90 + i * step + gap) * Math.PI / 180, a1 = (-90 + (i + 1) * step - gap) * Math.PI / 180;
     return `M${(r * Math.cos(a0)).toFixed(2)} ${(r * Math.sin(a0)).toFixed(2)}A${r} ${r} 0 0 1 ${(r * Math.cos(a1)).toFixed(2)} ${(r * Math.sin(a1)).toFixed(2)}`;
   };
   function drawFleetMarker(pid) {
