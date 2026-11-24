@@ -1,5 +1,5 @@
-title: "STATUS LIVE GERIVAN"
-description: "Status web site sequences"
+title: "DNAPass Password Generator"
+description: "Generate secure passwords inspired by DNA sequences"
 theme: jekyll-theme-minimal
 include: [".nojekyll", "*.html", "*.md", "docs/"]
 exclude: ["README.md"]
