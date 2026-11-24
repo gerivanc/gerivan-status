@@ -6,11 +6,11 @@
 
 *Parked in orbit, always in standby. Call it with a domain name and it wakes up, interrogates six ground stations, and relays everything back to you in seconds. No backend. No API keys. Nothing but your browser.*
 
-[![Open the satellite](https://img.shields.io/badge/🛰️_open_the_satellite-gerivan--status.gerivan.me-00BFFF?style=for-the-badge&labelColor=0d001a)](https://gerivan-status.gerivan.me/)
-[![Live status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgerivanc%2Fgerivan-status%2Fdata%2Fstatus.json&query=%24.overall&label=gerivan.me&style=for-the-badge&color=00BFFF&labelColor=0d001a&logo=statuspage&logoColor=00f0ff)](https://gerivan.me/status.html#NS/gerivan.me)
-[![Uptime 30d](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgerivanc%2Fgerivan-status%2Fdata%2Fstatus.json&query=%24.uptime.d30&suffix=%25&label=uptime%2030d&style=for-the-badge&color=39ff14&labelColor=0d001a)](https://gerivan.me/status.html#NS/gerivan.me)
+[![Open the satellite](https://img.shields.io/badge/🛰️_open_the_satellite-url--status.gerivan.me-00BFFF?style=for-the-badge&labelColor=0d001a)](https://url-status.gerivan.me/)
+[![Live status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgerivanc%2Furl-status%2Fdata%2Fstatus.json&query=%24.overall&label=gerivan.me&style=for-the-badge&color=00BFFF&labelColor=0d001a&logo=statuspage&logoColor=00f0ff)](https://url-status.gerivan.me/#NS/gerivan.me)
+[![Uptime 30d](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgerivanc%2Furl-status%2Fdata%2Fstatus.json&query=%24.uptime.d30&suffix=%25&label=uptime%2030d&style=for-the-badge&color=39ff14&labelColor=0d001a)](https://url-status.gerivan.me/#NS/gerivan.me)
 
-[![DNS monitor](https://github.com/gerivanc/gerivan-status/actions/workflows/npm-publish-github-packages.yml/badge.svg)](https://github.com/gerivanc/gerivan-status/actions/workflows/npm-publish-github-packages.yml)
+[![DNS monitor](https://github.com/gerivanc/url-status/actions/workflows/npm-publish-github-packages.yml/badge.svg)](https://github.com/gerivanc/url-status/actions/workflows/npm-publish-github-packages.yml)
 ![Backend](https://img.shields.io/badge/backend-none-ff00aa?style=flat-square&labelColor=0d001a)
 ![API keys](https://img.shields.io/badge/API%20keys-zero-ffcc00?style=flat-square&labelColor=0d001a)
 ![Ground stations](https://img.shields.io/badge/ground%20stations-6-00f0ff?style=flat-square&labelColor=0d001a)
@@ -18,7 +18,7 @@
 ![CSP](https://img.shields.io/badge/CSP-hash--locked-00f0ff?style=flat-square&labelColor=0d001a)
 [![License](https://img.shields.io/badge/license-MIT-39ff14?style=flat-square&labelColor=0d001a)](LICENSE)
 
-**[🛰️ Satellite](https://gerivan-status.gerivan.me/)** · **[🌐 Mirror on gerivan.me](https://gerivan.me/status.html#NS/gerivan.me)** · **[⚙️ Workflow runs](https://github.com/gerivanc/gerivan-status/actions)** · **[📄 Telemetry](https://raw.githubusercontent.com/gerivanc/gerivan-status/data/status.json)** · **[🚨 Incidents](https://github.com/gerivanc/gerivan-status/issues?q=is%3Aissue)**
+**[🛰️ Satellite](https://url-status.gerivan.me/)** · **[🌐 Mirror on gerivan.me](https://gerivan.me/status.html#NS/gerivan.me)** · **[⚙️ Workflow runs](https://github.com/gerivanc/url-status/actions)** · **[📄 Telemetry](https://raw.githubusercontent.com/gerivanc/url-status/data/status.json)** · **[🚨 Incidents](https://github.com/gerivanc/url-status/issues?q=is%3Aissue)**
 
 </div>
 
@@ -28,7 +28,7 @@
 
 A communications satellite doesn't stop existing when nobody is talking to it. It stays in orbit, in standby, spending almost nothing. The moment a ground station calls, it **receives** the signal, **processes** it and **relays** it back, loaded with information.
 
-`gerivan-status` works the same way, with two orbits:
+[url-status.gerivan.me](https://url-status.gerivan.me/) works the same way, with two orbits:
 
 | Orbit | What it does | Who powers it |
 |---|---|---|
@@ -37,11 +37,11 @@ A communications satellite doesn't stop existing when nobody is talking to it. I
 
 ## 🚀 Call the satellite
 
-Open **[gerivan-status.gerivan.me](https://gerivan-status.gerivan.me/)**, type a domain and press **X-RAY**. Or point straight at a target:
+Open **[url-status.gerivan.me](https://url-status.gerivan.me/)**, type a domain and press **X-RAY**. Or point straight at a target:
 
 ```text
-https://gerivan-status.gerivan.me/#A/example.com      ← X-Ray + A-record propagation
-https://gerivan-status.gerivan.me/#MX/example.com     ← X-Ray + MX propagation
+https://url-status.gerivan.me/#A/example.com      ← X-Ray + A-record propagation
+https://url-status.gerivan.me/#MX/example.com     ← X-Ray + MX propagation
 https://gerivan.me/status.html#NS/gerivan.me          ← mirror on the main site
 ```
 
@@ -160,7 +160,7 @@ Uptime counts time **without a full outage**.
 <details>
 <summary><b>🔧 Monitor configuration</b></summary>
 
-Edit [`gerivan-status/monitor/config.json`](gerivan-status/monitor/config.json) straight in the browser (✏️):
+Edit [`url-status/monitor/config.json`](url-status/monitor/config.json) straight in the browser (✏️):
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -210,18 +210,18 @@ Edit [`gerivan-status/monitor/config.json`](gerivan-status/monitor/config.json) 
 main                                          data  (single commit, overwritten every run)
 ├─ docs/                    ◀ GitHub Pages    ├─ status.json   ◀ read by the satellite
 │  ├─ index.html            the satellite     ├─ history.json  rolling 7 days
-│  ├─ CNAME                 gerivan-status…   ├─ daily.json    90 daily buckets
+│  ├─ CNAME                 url-status.gerivan.me   ├─ daily.json    90 daily buckets
 │  └─ .nojekyll                               ├─ state.json    incident tracking
 ├─ .github/workflows/                         └─ README.md
 │  └─ npm-publish-github-packages.yml  ◀ 24/7 monitor ("DNS monitor")
-├─ gerivan-status/monitor/
+├─ url-status/monitor/
 │  ├─ check.mjs             zero-dependency checker (Node 20)
 │  └─ config.json
 ├─ LICENSE
 └─ README.md
 ```
 
-> `gerivan-status/.github/workflows/dns-monitor.yml` is an unused copy: GitHub only runs workflows from the root `.github/` folder.
+> `url-status/.github/workflows/dns-monitor.yml` is an unused copy: GitHub only runs workflows from the root `.github/` folder.
 
 ## 🛠️ Editing the satellite
 
@@ -242,7 +242,7 @@ Edits to HTML or CSS alone don't affect the hash.
 
 ## ▶️ Operations
 
-- **Run the monitor now:** [Actions](https://github.com/gerivanc/gerivan-status/actions) → **DNS monitor** → **Run workflow**. Use a new run; *Re-run jobs* repeats an old commit.
+- **Run the monitor now:** [Actions](https://github.com/gerivanc/url-status/actions) → **DNS monitor** → **Run workflow**. Use a new run; *Re-run jobs* repeats an old commit.
 - **Alerts:** keep e-mail enabled for *Watching* in [notification settings](https://github.com/settings/notifications).
 - **Keep it public:** GitHub Actions is free and unlimited for public repositories.
 - **Delays:** scheduled runs can start a few minutes late; the page flags data as *stale* after 45 minutes without a run.
