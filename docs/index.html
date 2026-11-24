@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-2qCRluW6z14BaC4zz1FlHpx5Snx4agV2gbMME2QNaE4='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-doYVGPZqSdBAQqmWPT8ZLWw5A9dl6tQA8pmSq9My1fc='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <!-- 24/7 monitor data published by the gerivan-status repository (GitHub Actions). Edit this URL if you rename the repo. -->
 <meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/gerivan-status/data/">
@@ -826,9 +826,9 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
   };
 
   const NET = { n: 0 };
-  async function doh(url) {
+  async function doh(url, ms = TIMEOUT) {
     NET.n++;
-    const ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), TIMEOUT), t0 = performance.now();
+    const ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), ms), t0 = performance.now();
     try {
       const res = await fetch(url, { headers: { accept: 'application/dns-json' }, signal: ctrl.signal, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1052,12 +1052,27 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
   }
 
   /* ======================= security snapshot ======================= */
-  async function q(name, type, extra = '') {
-    const tn = TYPES[type] || type;
-    for (const u of [GOOGLE(encodeURIComponent(name), tn) + extra, DIRECT[0].url(encodeURIComponent(name), tn) + extra]) {
-      const r = await doh(u); if (r.ok) return r.json;
-    }
-    return null;
+  // Hedged lookup: ask Google first; if it hasn't answered in 900 ms (or fails), Cloudflare and Quad9
+  // join the race and the first good answer wins. Worst case ~5.4 s instead of 14 s in sequence.
+  const Q_TIMEOUT = 4500, Q_HEDGE = 900;
+  function q(name, type, extra = '') {
+    const tn = TYPES[type] || type, n = encodeURIComponent(name);
+    const urls = [GOOGLE(n, tn) + extra, DIRECT[0].url(n, tn) + extra, DIRECT[2].url(n, tn) + extra];
+    return new Promise((resolve) => {
+      let pending = 0, done = false, hedged = false;
+      const end = (v) => { if (!done) { done = true; clearTimeout(timer); resolve(v); } };
+      const hedge = () => { if (hedged || done) return; hedged = true; urls.slice(1).forEach(launch); };
+      const launch = (u) => {
+        pending++;
+        doh(u, Q_TIMEOUT).then(r => {
+          pending--;
+          if (r.ok) return end(r.json);
+          if (!hedged) hedge(); else if (pending === 0) end(null);
+        });
+      };
+      const timer = setTimeout(hedge, Q_HEDGE);
+      launch(urls[0]);
+    });
   }
   const txts = (j) => j ? (j.Answer || []).filter(a => a.type === 16).map(a => norm(16, a.data)) : [];
   const tags = (rec) => Object.fromEntries(rec.split(';').map(s => s.trim()).filter(Boolean).map(kv => { const i = kv.indexOf('='); return [kv.slice(0, i).trim().toLowerCase(), kv.slice(i + 1).trim()]; }));
@@ -1768,7 +1783,9 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     const R = { domain, inv, at: Date.now(), checks: [] };
     X.R = R;
     if (!Object.values(inv).some(x => x.j)) {
-      setSrc('dns', 'bad'); tlog(my, 'b', 'no DNS-over-HTTPS resolver reachable from this browser. Check your connection or extensions that block dns.google.');
+      setSrc('dns', 'bad');
+      tlog(my, 'b', 'no DNS-over-HTTPS resolver answered. Running a connectivity diagnosis…');
+      await dohBlocked(my, R);
       finish(my, R); return;
     }
     setSrc('dns', 'ok');
@@ -1802,10 +1819,54 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     if (my !== X.run) return;
     $('#xr').classList.remove('scanning');
     helix.scramble = false;
+    // never leave a card spinning: whatever didn't arrive is closed with an explicit message
+    document.querySelectorAll('#xr .xb .skel').forEach(sk => sk.replaceWith(el('p', { class: 'mon-off', text: R.blocked ? 'Not available: this network blocks DNS-over-HTTPS (see Findings).' : 'No data for this module in this scan.' })));
+    document.querySelectorAll('.src.busy').forEach(sp => { sp.className = 'src bad'; });
+    if (R.score === undefined && !R.blocked) { R.score = null; setGauge(R); }
     const took = performance.now() - X.t0;
     $('#xrStats').textContent = `${NET.n - X.n0} network requests · ${document.querySelectorAll('.src.ok').length} sources answered · ${fmtMs(took)}`;
     $('#xrStamp').textContent = new Date(R.at).toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
     tlog(my, 'h', `scan complete in ${(took / 1000).toFixed(2)} s${R.grade ? ' · grade ' + R.grade : ''}`);
+  }
+
+  /* ---------- DoH blocked: explain why, instead of spinning forever ---------- */
+  async function probeDoh() {
+    const tests = [['dns.google', GOOGLE('example.com', 1)], ['cloudflare-dns.com', DIRECT[0].url('example.com', 1)], ['dns.quad9.net', DIRECT[2].url('example.com', 1)]];
+    return Promise.all(tests.map(async ([host, u]) => { const r = await doh(u, Q_TIMEOUT); return { host, ok: r.ok, ms: r.ms, error: r.error }; }));
+  }
+  async function dohBlocked(my, R) {
+    R.blocked = true;
+    const diag = navigator.onLine === false ? null : await probeDoh();
+    if (my !== X.run) return;
+    const anyOk = diag && diag.some(d => d.ok);
+    const kind = (d) => d.ok ? 'answered' : d.error === 'timeout' ? 'silently dropped' : d.ms < 1500 ? 'refused instantly' : 'failed';
+    if (diag) diag.forEach(d => tlog(my, d.ok ? 'g' : 'b', `${d.host.padEnd(19)} ${kind(d)} after ${fmtMs(d.ms)}`));
+    const allDropped = diag && diag.every(d => !d.ok && d.error === 'timeout');
+    const allFast = diag && diag.every(d => !d.ok && d.error !== 'timeout' && d.ms < 1500);
+    const cause = !diag ? 'Your browser reports that it is offline.'
+      : anyOk ? 'The resolvers answer a test query but not the scan queries: the network is unstable or rate-limiting. Try again in a moment.'
+      : allDropped ? 'Connections to the public DoH resolvers are being silently dropped. This is the signature of a DNS filter with "block DoH bypass" (NextDNS, AdGuard, Control D, Pi-hole/AdGuard Home on the router) or of a firewall/antivirus doing network filtering.'
+      : allFast ? 'Connections are refused instantly. Typical causes: a browser extension blocking dns.google/cloudflare-dns.com, or a DNS filter that answers 0.0.0.0 for those names.'
+      : 'Mixed failures: a DNS filter, firewall or extension is interfering with DNS-over-HTTPS.';
+    tlog(my, 'w', 'diagnosis: ' + cause);
+    setSrc('rdap', ''); setSrc('cymru', ''); setSrc('geo', ''); setSrc('ct', ''); setSrc('crypto', '');
+    const g = $('#xrGauge'); g.style.setProperty('--gc', 'var(--bad)'); $('#gFg').style.strokeDasharray = '0 100';
+    $('#xrGrade').textContent = '⛔'; $('#xrScore').textContent = 'DoH blocked'; $('#xrVerdict').textContent = 'This network blocks DNS-over-HTTPS';
+    helix.bases = ''; paintHelix(); $('#xrSeq').textContent = ''; $('#xrFp').textContent = '';
+    const b = xbody('xrFind'); b.textContent = '';
+    const rows = el('div', { class: 'wl', style: { margin: '8px 0' } }, (diag || []).map(d => {
+      const r = el('div', {}, [el('i'), el('b', { text: d.host, style: { fontWeight: '500', fontFamily: 'var(--mono)' } }), el('span', { text: `${kind(d)} · ${fmtMs(d.ms)}` })]);
+      r.firstChild.style.setProperty('--wc', d.ok ? 'var(--ok)' : 'var(--bad)'); return r;
+    }));
+    const tips = el('ul', { style: { margin: '6px 0 0', paddingLeft: '18px' } }, [
+      'Open the page in a private window (extensions off). If it works, an extension is the cause.',
+      'Switch network, e.g. phone hotspot. If it works, the filter lives on this network/router.',
+      'In NextDNS / AdGuard / Control D, allow dns.google, cloudflare-dns.com and dns.quad9.net, or disable "Block bypass methods" for this device.',
+      'Check the antivirus web shield or firewall for DNS-over-HTTPS blocking.',
+    ].map(t => el('li', { text: t })));
+    b.append(el('div', { class: 'di bad' }, [el('b', { text: 'DNS-over-HTTPS is blocked from this browser' }), el('p', { text: cause }), rows,
+      el('p', { text: 'The X-Ray runs 100% in your browser and needs DoH to read DNS, so nothing can be shown until it can reach at least one of these resolvers.' }), tips,
+      el('div', { class: 'acts' }, el('button', { type: 'button', text: '↻ Test again', onclick: () => { X.domain = null; xray(S.domain); } }))]));
   }
 
   async function findZone(domain, soaJ) {
