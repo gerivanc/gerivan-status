@@ -10,7 +10,7 @@
 [![Live status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgerivanc%2Furl-status%2Fdata%2Fstatus.json&query=%24.overall&label=gerivan.me&style=for-the-badge&color=00BFFF&labelColor=0d001a&logo=statuspage&logoColor=00f0ff)](https://url-status.gerivan.me/#NS/gerivan.me)
 [![Uptime 30d](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgerivanc%2Furl-status%2Fdata%2Fstatus.json&query=%24.uptime.d30&suffix=%25&label=uptime%2030d&style=for-the-badge&color=39ff14&labelColor=0d001a)](https://url-status.gerivan.me/#NS/gerivan.me)
 
-[![DNS monitor](https://github.com/gerivanc/url-status/actions/workflows/npm-publish-github-packages.yml/badge.svg)](https://github.com/gerivanc/url-status/actions/workflows/npm-publish-github-packages.yml)
+[![DNS monitor](https://github.com/gerivanc/url-status/actions/workflows/dns-monitor.yml/badge.svg)](https://github.com/gerivanc/url-status/actions/workflows/dns-monitor.yml)
 ![Backend](https://img.shields.io/badge/backend-none-ff00aa?style=flat-square&labelColor=0d001a)
 ![API keys](https://img.shields.io/badge/API%20keys-zero-ffcc00?style=flat-square&labelColor=0d001a)
 ![Ground stations](https://img.shields.io/badge/ground%20stations-6-00f0ff?style=flat-square&labelColor=0d001a)
@@ -160,7 +160,7 @@ Uptime counts time **without a full outage**.
 <details>
 <summary><b>🔧 Monitor configuration</b></summary>
 
-Edit [`url-status/monitor/config.json`](url-status/monitor/config.json) straight in the browser (✏️):
+Edit [`monitor/config.json`](monitor/config.json) straight in the browser (✏️):
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -213,15 +213,13 @@ main                                          data  (single commit, overwritten 
 │  ├─ CNAME                 url-status.gerivan.me   ├─ daily.json    90 daily buckets
 │  └─ .nojekyll                               ├─ state.json    incident tracking
 ├─ .github/workflows/                         └─ README.md
-│  └─ npm-publish-github-packages.yml  ◀ 24/7 monitor ("DNS monitor")
-├─ url-status/monitor/
+│  └─ dns-monitor.yml       ◀ 24/7 monitor ("DNS monitor")
+├─ monitor/
 │  ├─ check.mjs             zero-dependency checker (Node 20)
 │  └─ config.json
 ├─ LICENSE
 └─ README.md
 ```
-
-> `url-status/.github/workflows/dns-monitor.yml` is an unused copy: GitHub only runs workflows from the root `.github/` folder.
 
 ## 🛠️ Editing the satellite
 
