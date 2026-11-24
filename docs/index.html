@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-doYVGPZqSdBAQqmWPT8ZLWw5A9dl6tQA8pmSq9My1fc='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-xACqvY4xroVB+WVZfoHoLx0bcZMlBpIPnj5EK7XQYg8='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<!-- 24/7 monitor data published by the gerivan-status repository (GitHub Actions). Edit this URL if you rename the repo. -->
-<meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/gerivan-status/data/">
+<!-- 24/7 monitor data published by the url-status repository (https://url-status.gerivan.me/) (GitHub Actions). Edit this URL if you rename the repo. -->
+<meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/url-status/data/">
 <meta name="description" content="Domain X-Ray: type any domain and get its registration, servers, networks, email security, certificates, attack surface and a security grade, plus live DNS propagation from around the world. 100% in the browser.">
 <meta name="theme-color" content="#0d001a">
 <title>Domain X-Ray &amp; DNS Status — gerivan.me</title>
@@ -1498,7 +1498,7 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
       const r = await fetch(`${MON_BASE}status.json?t=${Math.floor(Date.now() / 60000)}`, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const d = await r.json();
-      if (d.generator !== 'gerivan-status-monitor' || !Array.isArray(d.checks)) throw new Error('unexpected file format');
+      if (!['url-status-monitor', 'gerivan-status-monitor'].includes(d.generator) || !Array.isArray(d.checks)) throw new Error('unexpected file format');
       renderMonitor(d);
     } catch (e) {
       $('#monMeta').textContent = 'not connected';
