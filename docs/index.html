@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-zd2RHEyv+xg5B6I5Z6bluSCdGE2lWFcyB4D2dAdJHZw=' 'sha256-EIr/uIwCZATGyukaiAYZUxrtehNd8GmuDEszxG5WsEM='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://url-status.gerivan.me; manifest-src 'self'; worker-src 'self'; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-+uN+LPPTgd71KI0JCx75JtXyBTU1/nbMHWhs46LWLnM=' 'sha256-EIr/uIwCZATGyukaiAYZUxrtehNd8GmuDEszxG5WsEM='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://url-status.gerivan.me; manifest-src 'self'; worker-src 'self'; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <!-- 24/7 monitor data published by the url-status repository (https://url-status.gerivan.me/) (GitHub Actions). Edit this URL if you rename the repo. -->
 <meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/url-status/data/">
@@ -592,7 +592,22 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
 .tv-clk span{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:#fff;white-space:nowrap}
 .tv-clk b{display:flex;align-items:baseline;gap:5px;font-size:17px;font-weight:700;letter-spacing:1px;font-variant-numeric:tabular-nums;color:#ff8c00;text-shadow:0 0 10px rgba(255,140,0,.55)}
 .tv-clk i{font-style:normal;font-size:9.5px;font-weight:500;letter-spacing:.5px;color:rgba(232,246,255,.55)}
-@media (max-width:1100px){.tv-osd{left:20px;bottom:20px;padding:6px 9px 7px}.tv-clocks{gap:11px}.tv-clk b{font-size:14px}}
+/* desktop: broadcast "lower third", centered at the bottom of the map (the southern ocean, where no server lives) */
+@media (min-width:761px){
+  .tv-osd{left:50%;bottom:16px;display:flex;align-items:center;gap:16px;padding:7px 16px 8px;border-left:1px solid rgba(0,240,255,.28);border-radius:10px;
+    transform:translateX(-50%);background:rgba(3,6,12,.7);backdrop-filter:blur(4px);transition:opacity .28s ease,transform .28s ease}
+  .tv-osd::before{content:"";position:absolute;left:12px;right:12px;top:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#00f0ff 22%,#ff00aa 50%,#ffcc00 78%,transparent);box-shadow:0 0 10px rgba(0,240,255,.6)}
+  .tv-date{margin:0;padding:0 16px 0 0;border-bottom:0;border-right:1px dashed rgba(0,240,255,.3);white-space:nowrap;flex-direction:column;align-items:flex-start;gap:3px;font-size:11px;line-height:1.25}
+  .tv-date b{display:block;font-size:9px;font-weight:500;letter-spacing:1.4px;color:rgba(232,246,255,.6)}
+  .tv-clocks{gap:20px}
+  .tv-clk b{font-size:16px}
+  /* smart dodge: if a server pin or its label falls under the bar, it flies to the top of the map */
+  .tv-osd.osd-top{bottom:auto;top:44px}
+  .tv-osd.osd-ghost{opacity:.22}
+  .tv-osd.osd-swap{opacity:0;transform:translate(-50%,8px)}
+  .tv-osd.osd-top.osd-swap{transform:translate(-50%,-8px)}
+}
+@media (min-width:761px) and (max-width:1100px){.tv-osd{gap:11px;padding:6px 11px 7px;bottom:12px}.tv-date{padding-right:11px;font-size:10px}.tv-clocks{gap:11px}.tv-clk span{font-size:8.5px;letter-spacing:.8px}.tv-clk b{font-size:13px}.tv-osd.osd-top{top:36px}}
 @media (max-width:760px){
   .tv-osd{position:static;border-radius:0;border:0;border-top:1px solid rgba(0,240,255,.28);box-shadow:none;background:#05080f;padding:7px 9px 8px;backdrop-filter:none}
   .tv-date{font-size:10.5px;margin-bottom:5px;padding-bottom:5px}
@@ -817,7 +832,7 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
             </svg>
             <div class="tv-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
             <div class="tv-osd" role="group" aria-label="Date and world clocks">
-              <div class="tv-date"><span class="tv-rec" aria-hidden="true"></span><span id="tvDate">—</span></div>
+              <div class="tv-date"><span><span class="tv-rec" aria-hidden="true"></span> <span id="tvDate">—</span></span><b id="tvYou" hidden></b></div>
               <div class="tv-clocks">
                 <div class="tv-clk"><span>CURRENT ZULU TIME</span><b><time id="clkZ">--:--:--</time><i id="clkZz">UTC</i></b></div>
                 <div class="tv-clk"><span>Time in London</span><b><time id="clkL">--:--:--</time><i id="clkLz">—</i></b></div>
@@ -2305,6 +2320,44 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   }
   document.addEventListener('visibilitychange', () => { if (!document.hidden) osdTick(); });
   osdTick();
+  // OSD smart dodge (desktop): the bar lives at the bottom-center of the map; if any server pin, its label or a
+  // vantage marker would sit under it, it flies to the top-center; if both spots are busy it turns translucent.
+  const osdWide = matchMedia('(min-width:761px)');
+  let osdPos = 'bottom', osdSwapT = 0;
+  function osdObstacles() {
+    const out = [];
+    document.querySelectorAll('#map g.mk, #xrLayer .xpin .core, #xrLayer .xlbl').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (!r.width && !r.height) return;
+      if (el.matches('g.mk')) { const cx = r.left + r.width / 2, cy = r.top + r.height / 2; out.push({ l: cx - 10, r: cx + 10, t: cy - 10, b: cy + 10 }); }
+      else out.push({ l: r.left - 6, r: r.right + 6, t: r.top - 6, b: r.bottom + 6 });
+    });
+    return out;
+  }
+  function osdDodge() {
+    const osd = document.querySelector('.tv-osd'), box = $('#mapbox');
+    if (!osd || !box || document.hidden) return;
+    if (!osdWide.matches) { osd.classList.remove('osd-top', 'osd-ghost', 'osd-swap'); osdPos = 'bottom'; return; }
+    const b = box.getBoundingClientRect(), w = osd.offsetWidth, h = osd.offsetHeight;
+    if (!b.width || b.bottom < 0 || b.top > innerHeight) return;
+    const cs = getComputedStyle(osd), bottomGap = osd.classList.contains('osd-top') ? 16 : parseFloat(cs.bottom) || 16;
+    const l = b.left + (b.width - w) / 2;
+    const spot = { bottom: { l, r: l + w, t: b.bottom - bottomGap - h, b: b.bottom - bottomGap }, top: { l, r: l + w, t: b.top + 44, b: b.top + 44 + h } };
+    const obs = osdObstacles();
+    const busy = (s) => obs.some((o) => o.l < s.r && o.r > s.l && o.t < s.b && o.b > s.t);
+    const want = !busy(spot.bottom) ? 'bottom' : !busy(spot.top) ? 'top' : osdPos;
+    osd.classList.toggle('osd-ghost', busy(spot[want]));
+    if (want === osdPos) return;
+    osdPos = want; clearTimeout(osdSwapT);
+    osd.classList.add('osd-swap');
+    osdSwapT = setTimeout(() => { osd.classList.toggle('osd-top', want === 'top'); requestAnimationFrame(() => osd.classList.remove('osd-swap')); }, 280);
+  }
+  setInterval(osdDodge, 450);
+  window.addEventListener('resize', osdDodge);
+  // second line of the date block: the visitor's own clock ("YOU · 19:59 GMT-4"), desktop layout only
+  const youFmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short' });
+  const youTick = () => { const y = $('#tvYou'); if (!y) return; const p = Object.fromEntries(youFmt.formatToParts(new Date()).map((q) => [q.type, q.value])); y.textContent = `YOUR TIME · ${p.hour}:${p.minute} ${p.timeZoneName || ''}`.trim(); y.hidden = !osdWide.matches; };
+  youTick(); setInterval(youTick, 15000); osdWide.addEventListener('change', () => { youTick(); osdDodge(); });
   // camera-lens zoom on the TV: glide to the server, hold a few seconds, then return to the full world view
   const TV_VB = [0, 14, 1000, 400], TV_K = 2.6, TV_IN = 1400, TV_HOLD = 4200, TV_OUT = 1500;
   let tvZoomRun = 0;
