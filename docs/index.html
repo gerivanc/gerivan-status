@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-PliwdjGAJbo8DTaHOki3eSQMrY2HdqvkP+ZzN+Z2QwQ='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mfGMXhJIn5tdceL/0kieC4zvd7/ksga6NDVF2RYMcew='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <!-- 24/7 monitor data published by the url-status repository (https://url-status.gerivan.me/) (GitHub Actions). Edit this URL if you rename the repo. -->
 <meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/url-status/data/">
@@ -267,7 +267,7 @@ table.fleet{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px
 .log time{color:var(--secondary);margin-right:8px}
 .log .w{color:var(--warn)}.log .b{color:var(--bad)}.log .g{color:var(--ok)}
 .note{font-size:12.5px;color:var(--mute);margin-top:14px}
-footer{border-top:1px solid var(--gold-line);background:var(--panel2)}
+footer{background:var(--panel2)}
 footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:15px;padding-bottom:18px;font-size:13px;color:var(--mute)}
 footer b{color:var(--text)}
 code{font-family:var(--mono)}
@@ -440,6 +440,76 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
 @keyframes ping{from{r:4;opacity:.9}to{r:20;opacity:0}}
 .fleet-mode #xrLayer{display:none}
 
+
+/* ---------- unified search: domain · record type · settings · X-RAY ---------- */
+.xr-search{position:relative;max-width:820px;margin:0 auto}
+.xr-search .xr-form{max-width:none}
+.xr-form .xr-type{display:flex;flex-direction:column;justify-content:center;align-self:stretch;flex:none;border-left:1px solid var(--line);padding:0 6px 0 14px;cursor:pointer}
+.xr-form .xr-type span{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);line-height:1;text-align:left;padding-left:2px}
+.xr-form .xr-type select{height:30px;border:0;background:transparent;color:var(--input-text);font-family:var(--mono);font-size:17px;font-weight:700;padding:0 4px 0 0;cursor:pointer;outline:none}
+.xr-form .xr-type select option{background:var(--panel2);color:var(--text)}
+.xr-form .xr-type:focus-within{background:var(--soft)}
+.xr-form button.xr-gear{height:64px;width:56px;padding:0;justify-content:center;background:transparent;color:var(--mute);border-left:1px solid var(--line);letter-spacing:0;transition:color .2s,background .2s}
+.xr-form button.xr-gear svg{width:20px;height:20px;transition:transform .5s}
+.xr-form button.xr-gear:hover,.xr-form button.xr-gear[aria-expanded="true"]{color:var(--primary);background:var(--soft)}
+.xr-form button.xr-gear[aria-expanded="true"] svg{transform:rotate(90deg)}
+.xr-search .pop{top:calc(100% + 12px);right:0;text-align:left}
+.top-right .btn.live{height:36px}
+@media (max-width:760px){
+  .xr-form{flex-wrap:wrap}
+  .xr-form input{flex:1 1 100%;border-bottom:1px solid var(--line);padding:0 16px}
+  .xr-form .xr-type{flex:1 1 auto;border-left:0;flex-direction:row;align-items:center;gap:8px;padding:0 12px}
+  .xr-form .xr-type select{flex:1}
+  .xr-form button.xr-gear{height:52px;width:52px}
+  .xr-form button.xr-go{height:52px}
+  .xr-search .pop{left:0;right:0;width:auto}
+  .top-right{flex-wrap:wrap;gap:10px}
+}
+
+
+/* ---------- control strip (top) · status left · Live + themes right ---------- */
+header.top{position:sticky;top:0;z-index:40;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+.top .container{height:64px;justify-content:space-between}
+.top .top-right{margin-left:auto;justify-content:flex-end}
+.top .themes{padding:4px}
+
+
+/* ---------- watchlist strip · docked in the footer ---------- */
+footer .watch{background:transparent;border-bottom:1px solid var(--line)}
+footer .watch .container{flex-wrap:nowrap;justify-content:flex-start;gap:8px;color:inherit;padding-top:10px;padding-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--gold-line) transparent;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 48px),transparent)}
+footer .watch .container::-webkit-scrollbar{height:6px}
+footer .watch .container::-webkit-scrollbar-track{background:transparent}
+footer .watch .container::-webkit-scrollbar-thumb{background:var(--gold-line);border-radius:6px}
+footer .watch .container::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+
+/* ---------- footer · logo returns to base ---------- */
+footer{position:relative;overflow:hidden}
+.foot-orbit{position:relative;height:26px;border-top:1px solid var(--gold-line)}
+.foot-orbit::before{content:"";position:absolute;left:0;right:0;top:12px;border-top:1px dashed rgba(0,240,255,.28)}
+.foot-orbit i{position:absolute;top:2px;left:-30px;font-style:normal;font-size:18px;line-height:1;filter:drop-shadow(0 0 6px rgba(0,240,255,.7));animation:orbitfly 38s linear infinite}
+@keyframes orbitfly{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 60px))}}
+footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
+.foot-brand{background:var(--top);border:1px solid var(--gold-line);border-radius:16px;padding:12px 18px 12px 12px;box-shadow:0 8px 26px rgba(0,0,0,.35);transition:transform .25s,box-shadow .25s}
+.foot-brand:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.45),0 0 26px rgba(0,240,255,.35)}
+.foot-brand svg{width:56px;height:56px}
+.foot-brand .name{font-size:24px}
+.foot-brand .home{font-family:var(--mono);font-size:11.5px;margin-top:6px;color:#00f0ff;letter-spacing:.5px;opacity:.75;transition:opacity .2s,letter-spacing .25s}
+.foot-brand:hover .home{opacity:1;letter-spacing:1.2px}
+[data-theme="light"] .foot-brand .home{color:#fff;opacity:.9}
+.foot-brand .sig{animation:sigpulse 1.8s ease-in-out infinite}
+@keyframes sigpulse{0%,100%{opacity:1}50%{opacity:.25}}
+.foot-meta{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}
+@media (max-width:760px){
+  .top .container{height:auto;flex-wrap:nowrap;padding-top:10px;padding-bottom:10px}
+  .top .top-right{flex-wrap:nowrap;gap:8px}
+  .top .btn.live{min-width:0;padding:0 12px}
+  footer .foot-main{flex-direction:column;align-items:center;text-align:center}
+  .foot-brand{width:100%;justify-content:center}
+  .foot-brand .name{font-size:20px}
+  .foot-brand svg{width:46px;height:46px}
+  .foot-meta{align-items:center;text-align:center}
+}
+
 /* ===== flat-screen TV · live query map ===== */
 .tv{grid-column:1/-1;margin:8px 0 6px;min-width:0;position:relative}
 .tv-bezel{--tvglow:rgba(0,191,255,.38);position:relative;padding:14px 14px 28px;border-radius:18px;background:linear-gradient(180deg,#1c2433,#0b0f17 55%,#05070b);border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 44px rgba(0,0,0,.55),0 0 70px -12px var(--tvglow);transition:box-shadow .6s}
@@ -471,6 +541,26 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
 .tv .mapfoot{margin-top:12px}
 @keyframes tvon{0%{clip-path:inset(49.6% 0 49.6% 0);filter:brightness(3)}45%{clip-path:inset(49.6% 0 49.6% 0);filter:brightness(2)}100%{clip-path:inset(0 0 0 0);filter:none}}
 @keyframes tvrec{50%{opacity:.15}}
+
+
+/* ===== TV camera OSD · date + world clocks ===== */
+.tv-osd{position:absolute;left:34px;bottom:30px;z-index:3;pointer-events:none;font-family:var(--mono);color:#e8f6ff;background:rgba(3,6,12,.62);border:1px solid rgba(0,240,255,.28);border-left:3px solid #00f0ff;border-radius:6px;padding:8px 12px 9px;box-shadow:0 6px 18px rgba(0,0,0,.45);backdrop-filter:blur(2px)}
+.tv-date{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:1.6px;color:#fff;margin-bottom:7px;padding-bottom:6px;border-bottom:1px dashed rgba(0,240,255,.25)}
+.tv-rec{width:7px;height:7px;border-radius:50%;background:#ff3b5c;box-shadow:0 0 7px #ff3b5c;animation:tvrec 2s steps(2) infinite}
+.tv-clocks{display:flex;gap:16px}
+.tv-clk{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tv-clk span{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:#fff;white-space:nowrap}
+.tv-clk b{display:flex;align-items:baseline;gap:5px;font-size:17px;font-weight:700;letter-spacing:1px;font-variant-numeric:tabular-nums;color:#ff8c00;text-shadow:0 0 10px rgba(255,140,0,.55)}
+.tv-clk i{font-style:normal;font-size:9.5px;font-weight:500;letter-spacing:.5px;color:rgba(232,246,255,.55)}
+@media (max-width:1100px){.tv-osd{left:20px;bottom:20px;padding:6px 9px 7px}.tv-clocks{gap:11px}.tv-clk b{font-size:14px}}
+@media (max-width:760px){
+  .tv-osd{position:static;border-radius:0;border:0;border-top:1px solid rgba(0,240,255,.28);box-shadow:none;background:#05080f;padding:7px 9px 8px;backdrop-filter:none}
+  .tv-date{font-size:10.5px;margin-bottom:5px;padding-bottom:5px}
+  .tv-clocks{justify-content:space-between;gap:6px}
+  .tv-clk span{font-size:8px;letter-spacing:.6px}
+  .tv-clk b{font-size:13px;gap:3px}
+  .tv-clk i{font-size:8px}
+}
 
 /* ===== TV camera-lens zoom ===== */
 .tv-zoom{display:none;color:#ffcc00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -518,18 +608,9 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
 
 <header class="top">
   <div class="container">
-    <a class="brand" href="https://gerivan.me/" id="brandLink" aria-label="Back to gerivan.me">
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="30" cy="34" r="22" fill="#12376a" stroke="#00f0ff" stroke-width="1.5"/>
-        <path d="M14 28c6-3 10 1 15-1s7-7 13-5M10 38c7 2 11-2 17 0s9 6 17 3" stroke="#00f0ff" stroke-width="2.2" opacity=".75" fill="none" stroke-linecap="round"/>
-        <ellipse cx="30" cy="34" rx="10" ry="22" fill="none" stroke="#00f0ff" stroke-width="1.8" opacity=".75"/>
-        <path d="M20 35l8 9 22-30" stroke="#ffcc00" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M48 6a12 12 0 0 1 10 10M47 12a6 6 0 0 1 5 5" stroke="#ff00aa" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      </svg>
-      <div><div class="name">gerivan.me <span>status</span></div><div class="tag">Domain X-Ray · Live DNS Propagation &amp; Status Monitor · 24/7/365</div></div>
-    </a>
+    <div class="live-state" id="liveState" role="status" aria-live="polite"><span class="dot"></span><span class="txt" id="liveText">Starting monitor…</span></div>
     <div class="top-right">
-      <div class="live-state" id="liveState" role="status" aria-live="polite"><span class="dot"></span><span class="txt" id="liveText">Starting monitor…</span></div>
+      <button type="button" class="btn live" id="liveBtn" title="Auto-refresh countdown — click to check now (R)">↻ Live <b id="cd">--</b></button>
       <div class="themes" role="group" aria-label="Theme switcher">
         <button type="button" class="tbtn t-cyber" data-theme="cyber" title="Cyber theme" aria-label="Cyber theme" aria-pressed="true">🔷</button>
         <button type="button" class="tbtn t-light" data-theme="light" title="Light theme" aria-label="Light theme" aria-pressed="false">☀️</button>
@@ -539,36 +620,6 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
   </div>
 </header>
 
-<nav class="bar">
-  <div class="container">
-    <form id="form" autocomplete="off">
-      <input id="q" type="text" spellcheck="false" aria-label="Domain name" value="gerivan.me">
-      <select id="type" aria-label="Record type">
-        <option>A</option><option>AAAA</option><option>CNAME</option><option>MX</option><option selected>NS</option>
-        <option>SOA</option><option>TXT</option><option>CAA</option><option>DS</option><option>DNSKEY</option>
-      </select>
-      <button type="button" class="btn icon" id="gear" aria-label="Settings" aria-expanded="false" title="Settings">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1 1 13 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
-      </button>
-      <button type="submit" class="btn primary" id="go">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg>Search
-      </button>
-    </form>
-    <div class="right-tools">
-      <button class="btn live" id="liveBtn" title="Auto-refresh countdown — click to check now (R)">↻ Live <b id="cd">--</b></button>
-      <div class="pop" id="pop" role="dialog" aria-label="Settings">
-        <h4>Monitor settings</h4>
-        <label>Refresh every
-          <select id="interval"><option value="30">30 s</option><option value="60">60 s</option><option value="300">5 min</option><option value="900">15 min</option></select>
-        </label>
-        <label>Desktop alerts <select id="alerts"><option value="0">Off</option><option value="1">On status change</option></select></label>
-        <button class="btn" id="exportBtn" type="button">⇩ Export JSON report</button>
-        <button class="btn" id="clearBtn" type="button">Clear stored history</button>
-      </div>
-    </div>
-  </div>
-</nav>
-<div class="watch" aria-label="Watchlist"><div class="container" id="watch"></div></div>
 
 <section class="xr" id="xr" aria-label="Domain X-Ray">
   <div class="container">
@@ -576,11 +627,29 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
       <div class="xr-kick">// zero backend · zero API keys · 100% in your browser</div>
       <h1 class="xr-h">DOMAIN X-RAY</h1>
       <p class="xr-sub">Type <b>any</b> domain. In a few seconds this page interrogates the global DNS, the domain registries, the Internet's routing tables and the public Certificate Transparency logs, then grades the security posture and hands you the exact records to fix it.</p>
-      <form class="xr-form" id="xrForm" autocomplete="off" role="search">
-        <span class="pfx" aria-hidden="true">https://</span>
-        <input id="xrQ" type="text" spellcheck="false" autocapitalize="off" aria-label="Domain to X-Ray" placeholder="example.com" value="gerivan.me">
-        <button type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M7.5 10.5h6M10.5 7.5v6"/></svg><span>X-RAY</span></button>
-      </form>
+      <div class="xr-search">
+        <form class="xr-form" id="xrForm" autocomplete="off" role="search">
+          <span class="pfx" aria-hidden="true">https://</span>
+          <input id="xrQ" type="text" spellcheck="false" autocapitalize="off" aria-label="Domain to X-Ray" placeholder="example.com" value="gerivan.me">
+          <label class="xr-type"><span>record</span>
+            <select id="type" aria-label="Record type for the live propagation map" title="Record type for the live propagation map">
+              <option>A</option><option>AAAA</option><option>CNAME</option><option>MX</option><option selected>NS</option>
+              <option>SOA</option><option>TXT</option><option>CAA</option><option>DS</option><option>DNSKEY</option>
+            </select>
+          </label>
+          <button type="button" class="xr-gear" id="gear" aria-label="Monitor settings" aria-expanded="false" aria-controls="pop" title="Monitor settings"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1 1 13 8.5a3.5 3.5 0 0 1 0 7z"/></svg></button>
+          <button type="submit" class="xr-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M7.5 10.5h6M10.5 7.5v6"/></svg><span>X-RAY</span></button>
+        </form>
+        <div class="pop" id="pop" role="dialog" aria-label="Settings">
+          <h4>Monitor settings</h4>
+          <label>Refresh every
+            <select id="interval"><option value="30">30 s</option><option value="60">60 s</option><option value="300">5 min</option><option value="900">15 min</option></select>
+          </label>
+          <label>Desktop alerts <select id="alerts"><option value="0">Off</option><option value="1">On status change</option></select></label>
+          <button class="btn" id="exportBtn" type="button">⇩ Export JSON report</button>
+          <button class="btn" id="clearBtn" type="button">Clear stored history</button>
+        </div>
+      </div>
       <div class="xr-try">Try:
         <button type="button" data-d="gerivan.me">gerivan.me</button>
         <button type="button" data-d="oracle.com">oracle.com</button>
@@ -660,6 +729,14 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
               <g id="markers"></g>
             </svg>
             <div class="tv-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="tv-osd" role="group" aria-label="Date and world clocks">
+              <div class="tv-date"><span class="tv-rec" aria-hidden="true"></span><span id="tvDate">—</span></div>
+              <div class="tv-clocks">
+                <div class="tv-clk"><span>Zulu Time Ago</span><b><time id="clkZ">--:--:--</time><i id="clkZz">UTC</i></b></div>
+                <div class="tv-clk"><span>Time in London</span><b><time id="clkL">--:--:--</time><i id="clkLz">—</i></b></div>
+                <div class="tv-clk"><span>Time in São Paulo</span><b><time id="clkS">--:--:--</time><i id="clkSz">—</i></b></div>
+              </div>
+            </div>
             <div class="tip" id="tip"></div>
           </div>
           <div class="tv-brand" aria-hidden="true">🛰️ DOMAIN X-RAY</div>
@@ -768,9 +845,23 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
 </main>
 
 <footer>
-  <div class="container">
-    <span>© <span id="yr"></span> <b>Gerivan Costa dos Santos</b> · <a href="https://gerivan.me/" id="homeLink">gerivan.me</a></span>
-    <span><kbd>/</kbd> X-Ray · <kbd>R</kbd> refresh · <kbd>E</kbd> export · link format: <code>#A/example.com</code></span>
+  <div class="foot-orbit" aria-hidden="true"><i>🛰️</i></div>
+  <div class="watch" aria-label="Watchlist"><div class="container" id="watch"></div></div>
+  <div class="container foot-main">
+    <a class="brand foot-brand" href="https://gerivan.me/" id="brandLink" aria-label="Back to gerivan.me" title="Return to base · gerivan.me">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="30" cy="34" r="22" fill="#12376a" stroke="#00f0ff" stroke-width="1.5"/>
+        <path d="M14 28c6-3 10 1 15-1s7-7 13-5M10 38c7 2 11-2 17 0s9 6 17 3" stroke="#00f0ff" stroke-width="2.2" opacity=".75" fill="none" stroke-linecap="round"/>
+        <ellipse cx="30" cy="34" rx="10" ry="22" fill="none" stroke="#00f0ff" stroke-width="1.8" opacity=".75"/>
+        <path d="M20 35l8 9 22-30" stroke="#ffcc00" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="sig" d="M48 6a12 12 0 0 1 10 10M47 12a6 6 0 0 1 5 5" stroke="#ff00aa" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div><div class="name">gerivan.me <span>status</span></div><div class="tag">Domain X-Ray · Live DNS Propagation &amp; Status Monitor · 24/7/365</div><div class="home">↩ Return to base · gerivan.me</div></div>
+    </a>
+    <div class="foot-meta">
+      <span>© <span id="yr"></span> <b>Gerivan Costa dos Santos</b> · <a href="https://gerivan.me/" id="homeLink">gerivan.me</a></span>
+      <span><kbd>/</kbd> X-Ray · <kbd>R</kbd> refresh · <kbd>E</kbd> export · link format: <code>#A/example.com</code></span>
+    </div>
   </div>
 </footer>
 
@@ -1497,7 +1588,7 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     S.domain = domain; S.type = type;
     S.history = store.get(histKey(), []);
     S.prevStatus = null; S.prevKey = null; S.prevBad = '';
-    $('#q').value = domain; $('#type').value = type;
+    $('#xrQ').value = domain; $('#type').value = type;
     $('#leadDomain').textContent = domain;
     $('#tvChan').textContent = `${type} · ${domain}`;
     $('#title').textContent = `DNS Propagation Status · ${type}`;
@@ -1517,15 +1608,7 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
   }
 
   /* ======================= controls ======================= */
-  $('#form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const d = sanitizeDomain($('#q').value);
-    if (!d) { $('#q').setCustomValidity('Enter a valid domain, e.g. gerivan.me'); $('#q').reportValidity(); return; }
-    $('#q').setCustomValidity('');
-    startMonitor(d, $('#type').value, true);
-  });
-  $('#q').addEventListener('input', () => $('#q').setCustomValidity(''));
-  $('#type').addEventListener('change', () => { const d = sanitizeDomain($('#q').value); if (d) startMonitor(d, $('#type').value, true); });
+  $('#type').addEventListener('change', () => { const d = sanitizeDomain($('#xrQ').value) || S.domain; if (d) startMonitor(d, $('#type').value, true); });
   $('#liveBtn').addEventListener('click', () => { if (!S.running) runCheck(); });
   window.addEventListener('hashchange', () => { const [d, t] = fromHash(); if (d !== S.domain || t !== S.type) startMonitor(d, t, false); });
 
@@ -2075,6 +2158,26 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     }
     if (pts.length) drawServers(pts);
   }
+  // camera OSD: Zulu date + three world clocks (UTC · London · São Paulo), ticking every second, 24 h
+  const OSD_CLOCKS = [['clkZ', 'UTC'], ['clkL', 'Europe/London'], ['clkS', 'America/Sao_Paulo']]
+    .map(([id, timeZone]) => ({ id, fmt: new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZoneName: 'short' }) }));
+  const OSD_DATE = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+  let osdTimer = 0;
+  function osdTick() {
+    clearTimeout(osdTimer);
+    const now = new Date();
+    for (const c of OSD_CLOCKS) {
+      const p = Object.fromEntries(c.fmt.formatToParts(now).map(x => [x.type, x.value]));
+      const t = $('#' + c.id), z = $('#' + c.id + 'z');
+      if (t) { t.textContent = `${p.hour}:${p.minute}:${p.second}`; t.setAttribute('datetime', now.toISOString()); }
+      if (z && p.timeZoneName) z.textContent = p.timeZoneName;
+    }
+    const d = $('#tvDate');
+    if (d) d.textContent = OSD_DATE.format(now).replace(/,/g, '').toUpperCase() + ' · UTC';
+    osdTimer = setTimeout(osdTick, 1000 - (Date.now() % 1000) + 10);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) osdTick(); });
+  osdTick();
   // camera-lens zoom on the TV: glide to the server, hold a few seconds, then return to the full world view
   const TV_VB = [0, 14, 1000, 400], TV_K = 2.6, TV_IN = 1400, TV_HOLD = 4200, TV_OUT = 1500;
   let tvZoomRun = 0;
@@ -2604,7 +2707,8 @@ dl.kv dd{margin:0;word-break:break-word;color:var(--text)}
     const inp = $('#xrQ'), d = sanitizeDomain(inp.value);
     if (!d) { inp.setCustomValidity('Enter a valid domain, e.g. example.com'); inp.reportValidity(); return; }
     inp.setCustomValidity('');
-    if (d === S.domain) { X.domain = null; xray(d); } else startMonitor(d, S.type, true);
+    const t = $('#type').value;
+    if (d === S.domain && t === S.type) { X.domain = null; xray(d); } else startMonitor(d, t, true);
   });
   $('#xrQ').addEventListener('input', () => $('#xrQ').setCustomValidity(''));
   document.querySelectorAll('.xr-try button').forEach(bt => bt.addEventListener('click', () => { if (bt.dataset.d === S.domain) { X.domain = null; xray(bt.dataset.d); } else startMonitor(bt.dataset.d, S.type, true); }));
