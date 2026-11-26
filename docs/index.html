@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-+uN+LPPTgd71KI0JCx75JtXyBTU1/nbMHWhs46LWLnM=' 'sha256-EIr/uIwCZATGyukaiAYZUxrtehNd8GmuDEszxG5WsEM='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://url-status.gerivan.me; manifest-src 'self'; worker-src 'self'; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ja90moVDW2XJrhKTfitkCeO1AfxBow9BRblyl6vIoyo=' 'sha256-EIr/uIwCZATGyukaiAYZUxrtehNd8GmuDEszxG5WsEM='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://url-status.gerivan.me; manifest-src 'self'; worker-src 'self'; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <!-- 24/7 monitor data published by the url-status repository (https://url-status.gerivan.me/) (GitHub Actions). Edit this URL if you rename the repo. -->
 <meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/url-status/data/">
@@ -656,6 +656,49 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   .ans{max-width:170px}.container{padding:0 12px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ===== Fleet radar · mission-control livestream for the subdomain fleet map ===== */
+.fleet-screen{border-color:var(--line);box-shadow:inset 0 0 40px rgba(0,0,0,.5),0 0 30px rgba(0,150,255,.15)}
+.fleet-screen::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.fl-hud{position:absolute;left:0;right:0;top:0;z-index:3;display:flex;gap:12px;justify-content:space-between;align-items:center;padding:8px 13px 16px;font-family:var(--mono);font-size:11px;color:#e8f6ff;pointer-events:none;background:linear-gradient(180deg,rgba(3,6,12,.72),transparent)}
+.fl-live{display:inline-flex;align-items:center;gap:6px;font-weight:700;letter-spacing:1.4px;color:#39ff14;white-space:nowrap}
+.fl-live::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor;animation:tvrec 1.2s steps(2) infinite}
+.fl-ch{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.fl-ch b{color:#00f0ff;font-weight:600}
+.fl-ago{white-space:nowrap;color:rgba(232,246,255,.75);font-variant-numeric:tabular-nums}
+.fleet-screen.sweeping .fl-live{color:#ffcc00}.fleet-screen.sweeping .fl-ago{color:#ffcc00}
+.fl-radar{position:absolute;left:50%;top:50%;width:200%;aspect-ratio:1;z-index:1;pointer-events:none;transform:translate(-50%,-50%);border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 290deg,rgba(0,240,255,.05) 320deg,rgba(0,240,255,.16) 355deg,rgba(0,240,255,.42) 359.4deg,transparent 360deg);mix-blend-mode:screen}
+.fleet-screen.sweeping .fl-radar{background:conic-gradient(from 0deg,transparent 0 290deg,rgba(255,204,0,.06) 320deg,rgba(255,204,0,.2) 355deg,rgba(255,204,0,.5) 359.4deg,transparent 360deg)}
+[data-theme="light"] .fl-radar{mix-blend-mode:multiply;opacity:.55}
+.fl-rings{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,transparent 0 24.6%,rgba(0,240,255,.13) 24.8% 25%,transparent 25.2% 49.6%,rgba(0,240,255,.11) 49.8% 50%,transparent 50.2% 74.6%,rgba(0,240,255,.09) 74.8% 75%,transparent 75.2%)}
+#fmap{position:relative;z-index:1}
+#fmap .farc{fill:none;stroke-width:1;opacity:.5;stroke-dasharray:3 6;animation:flow 1.1s linear infinite}
+#fmap .fbeam{fill:none;stroke-width:1.6;stroke-linecap:round;stroke-dasharray:var(--len) var(--len);stroke-dashoffset:var(--len);animation:flbeam 1.5s ease-out forwards;filter:drop-shadow(0 0 2px currentColor)}
+#fmap .fping{fill:none;stroke-width:1.6;animation:flping 1.4s ease-out forwards}
+#fmap .ftgt .core{fill:#ffcc00;stroke:#fff;stroke-width:1.4}
+#fmap .ftgt .ring{fill:none;stroke:#ffcc00;stroke-width:2;animation:ping 1.8s ease-out infinite}
+#fmap .ftgt text{font-family:var(--mono);font-size:11px;font-weight:600;fill:#ffcc00;paint-order:stroke;stroke:var(--map);stroke-width:3.4px;pointer-events:none}
+#fmap .ftgt .sub{font-size:9.5px;font-weight:400;fill:var(--text)}
+[data-theme="light"] #fmap .ftgt text{fill:#b35c00}[data-theme="light"] #fmap .ftgt .sub{fill:var(--text)}
+#fmap .fsat-trail{fill:none;stroke:#00f0ff;stroke-width:1.2;stroke-dasharray:2 4;opacity:.45}
+#fmap .fsat-foot{fill:url(#flFoot)}
+#fmap .fsat-body{filter:drop-shadow(0 0 3px rgba(0,240,255,.9))}
+.fl-corners i:nth-child(1),.fl-corners i:nth-child(2){top:34px}
+.fl-corners i:nth-child(3),.fl-corners i:nth-child(4){bottom:36px}
+.fleet-screen.sweeping .fl-corners i{border-color:rgba(255,204,0,.75)}
+.fl-crawl{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;height:26px;background:rgba(3,6,12,.78);border-top:1px solid rgba(0,240,255,.28);font-size:12px;color:#e8f6ff;overflow:hidden}
+.fl-tag{flex:none;height:100%;display:flex;align-items:center;gap:6px;padding:0 10px;font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:1.5px;color:#140026;background:linear-gradient(90deg,#00f0ff,#ffcc00)}
+.fl-track{flex:1;overflow:hidden;white-space:nowrap;-webkit-mask:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.fl-run{display:inline-block;padding-left:100%;animation:flcrawl var(--dur,60s) linear infinite}
+.fl-crawl:hover .fl-run{animation-play-state:paused}
+.fl-run span{margin-right:38px}.fl-run i{font-style:normal;font-weight:700}
+.fl-run b{font-family:var(--mono);font-weight:600}
+@keyframes flbeam{0%{stroke-dashoffset:var(--len);opacity:1}60%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes flping{from{r:5;opacity:.95}to{r:24;opacity:0}}
+@keyframes flcrawl{to{transform:translateX(-100%)}}
+@media (max-width:760px){.fl-hud{font-size:9.5px;padding:6px 8px 12px;gap:8px}.fl-ch{display:none}.fl-crawl{height:22px;font-size:11px}.fl-tag{font-size:8.5px;padding:0 7px}}
+@media (prefers-reduced-motion:reduce){.fl-radar{display:none}}
+
 /* ===== PWA install card (bilingual EN / PT-BR, follows the active theme) ===== */
 .pwa-card{position:fixed;z-index:60;right:22px;bottom:22px;width:min(400px,calc(100vw - 32px));padding:18px 18px 16px;border-radius:18px;
   background:var(--panel2);color:var(--text);border:1px solid var(--line);
@@ -900,12 +943,27 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
           <span class="maplabel">🛰️ Subdomain fleet · CNAME</span>
           <a class="maplink" href="#tv">📺 Current query is live on the X-Ray screen ↑</a>
         </div>
-        <div class="mapbox" id="fleetbox">
+        <div class="mapbox fleet-screen" id="fleetbox">
+          <div class="fl-hud" aria-hidden="true">
+            <span class="fl-live" id="flLive">FLEET RADAR</span>
+            <span class="fl-ch">CH 02 · <b>*.gerivan.me</b> · 5 sites × 26 vantage points</span>
+            <span class="fl-ago" id="flAgo">warming up…</span>
+          </div>
+          <div class="fl-rings" aria-hidden="true"></div>
+          <div class="fl-radar" id="flRadar" aria-hidden="true"></div>
           <svg viewBox="0 14 1000 400" id="fmap" role="img" aria-label="World map of the subdomain fleet checks">
+            <defs><radialGradient id="flFoot"><stop offset="0" stop-color="#00f0ff" stop-opacity=".22"/><stop offset="1" stop-color="#00f0ff" stop-opacity="0"/></radialGradient></defs>
             <use href="#wLand" class="land"/>
             <use href="#wBorders" class="borders"/>
+            <g id="farcs"></g>
+            <g id="fbeams"></g>
+            <g id="fpings"></g>
             <g id="fmarkers"></g>
+            <g id="ftarget"></g>
+            <g id="fsat" aria-hidden="true"></g>
           </svg>
+          <div class="tv-corners fl-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="fl-crawl" id="flCrawlBox"><span class="fl-tag" aria-hidden="true">📡 LIVE FEED</span><div class="fl-track"><div class="fl-run" id="flCrawl" role="log" aria-live="off" aria-label="Fleet live feed"></div></div></div>
           <div class="tip" id="ftip"></div>
         </div>
         <div class="mapfoot">
@@ -1447,6 +1505,7 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
       await Promise.all(POINTS.map(p => doh(p.url(encodeURIComponent(f.host), 5)).then(res => {
         cells[p.id] = toCell(res, 5);
         if (fkEls[p.id]) drawFleetMarker(p.id);
+        flBeam(p.id, f);
       })));
       const c = consensusOf(cells), probe = await probeP;
       let status = 'operational';
@@ -1458,6 +1517,7 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
       store.set('fleet:' + f.host, hist);
       const prev = S.fleet[f.id].status;
       Object.assign(S.fleet[f.id], c, { status, probe, at, hist, pending: false });
+      flFeed(f, S.fleet[f.id]);
       if (prev && prev !== status) log({ operational: 'g', degraded: 'w', outage: 'b' }[status] || '', `${f.host}: ${prev} → ${status}`);
     }));
     S.fleetAt = at;
@@ -1471,6 +1531,7 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
     S.fleetRunning = false;
     drawFleetMarkers();
     renderFleet(); renderWatch();
+    flCycle(at);
   }
 
   // ring with one segment per subdomain, clockwise from 12 o'clock (adapts to the size of FLEET)
@@ -1544,6 +1605,143 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
     const A = S.apexLast;
     chip(FLEET_ZONE, A ? `${A.agree}/${A.reach}` : '', A ? A.status : null, FLEET_ZONE, 'NS', 'Nameservers of the apex');
     for (const f of FLEET) { const F = S.fleet[f.id] || {}; chip(f.host, F.reach ? `${F.agree}/${F.reach}` : '…', F.status, f.host, 'CNAME', `${f.host} → ${F.majState === 'ok' ? F.majority : '?'}`); }
+  }
+
+  /* ======================= fleet radar · mission-control livestream ======================= */
+  // A radar sweep pings every city it passes, a satellite flies a ground track, every DNS answer shoots a beam
+  // to where the sites really live (the CNAME target, geolocated), and a news crawl tells laypeople what happens.
+  const FL = { target: null, geoFor: null, feed: [], last: 0, sweepA: 0, raf: 0, visible: true, satT: 0, trail: [], prevT: 0, beams: 0 };
+  const FL_DEFAULT = { lat: 37.78, lon: -122.39, label: 'GitHub Pages · locating…' }; // until the real target is geolocated
+  const flTarget = () => FL.target || FL_DEFAULT;
+  const flCurve = (x, y, tx, ty) => { const d = Math.hypot(tx - x, ty - y), mx = (x + tx) / 2, my = (y + ty) / 2 - d * 0.28; return `M${x.toFixed(1)} ${y.toFixed(1)}Q${mx.toFixed(1)} ${my.toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)}`; };
+  function flLocState(pid) {
+    const all = FLEET.map(f => fleetState(f.id, pid));
+    if (all.every(s => s === 'pending')) return 'pending';
+    return all.every(s => s === 'ok') ? 'ok' : all.some(s => s === 'bad') ? 'bad' : all.some(s => s === 'down') ? 'down' : 'drift';
+  }
+  function flDrawTarget() {
+    const g = $('#ftarget'), a = $('#farcs'); if (!g || !a) return;
+    const t = flTarget(), [tx, ty] = project(t.lat, t.lon);
+    g.textContent = ''; a.textContent = '';
+    for (const v of VANTAGE) {
+      const [x, y] = project(v.lat, v.lon); if (Math.hypot(tx - x, ty - y) < 6) continue;
+      const p = svgEl('path', { class: 'farc', d: flCurve(x, y, tx, ty) });
+      p.style.stroke = STATE_COLOR[flLocState(v.id)] || 'var(--accent)'; p.style.animationDelay = `-${(Math.random() * 1.1).toFixed(2)}s`;
+      a.append(p);
+    }
+    const pin = svgEl('g', { class: 'ftgt', transform: `translate(${tx.toFixed(1)} ${ty.toFixed(1)})` });
+    const left = tx >= 150, lbl = svgEl('text', { 'text-anchor': left ? 'end' : 'start' });
+    const [l1, l2] = t.label.split(' · ');
+    lbl.append(svgEl('tspan', { x: left ? '-10' : '10', y: '15' }), svgEl('tspan', { x: left ? '-10' : '10', y: '28', class: 'sub' }));
+    lbl.children[0].textContent = '⌂ ' + l1; lbl.children[1].textContent = l2 ? '📍 ' + l2 : 'where the sites live';
+    pin.append(svgEl('circle', { class: 'ring', r: '4' }), svgEl('circle', { class: 'core', r: '5' }), lbl);
+    g.append(pin);
+  }
+  function flBeam(pid, f) {
+    const v = VANTAGE.find(x => x.id === pid), g = $('#fbeams');
+    if (!v || !g || reduceMotion() || !FL.visible || FL.beams > 60) return;
+    const t = flTarget(), [x, y] = project(v.lat, v.lon), [tx, ty] = project(t.lat, t.lon);
+    if (Math.hypot(tx - x, ty - y) < 6) return;
+    const p = svgEl('path', { class: 'fbeam', d: flCurve(x, y, tx, ty) });
+    g.append(p);
+    const len = Math.ceil(p.getTotalLength());
+    p.style.setProperty('--len', len); p.style.stroke = f.color; p.style.color = f.color;
+    p.style.animationDelay = `${(Math.random() * 0.35).toFixed(2)}s`;
+    FL.beams++;
+    setTimeout(() => { p.remove(); FL.beams--; }, 2100);
+  }
+  function flPing(v) {
+    const g = $('#fpings'); if (!g) return;
+    const [x, y] = project(v.lat, v.lon), st = flLocState(v.id);
+    const c = svgEl('circle', { class: 'fping', cx: x.toFixed(1), cy: y.toFixed(1), r: '5' });
+    c.style.stroke = st === 'pending' ? 'var(--primary)' : STATE_COLOR[st];
+    g.append(c); setTimeout(() => c.remove(), 1500);
+  }
+  // news crawl: plain-language headlines about the fleet
+  function flSay(html) { FL.feed.unshift(html); FL.feed.length = Math.min(FL.feed.length, 14); flRenderCrawl(); }
+  function flRenderCrawl() {
+    const run = $('#flCrawl'); if (!run) return;
+    const intro = '<span>🛰️ <i style="color:#00f0ff">What you are watching:</i> 21 cities around the world plus 5 public resolvers ask the Internet, every minute, where each of the 5 <b>gerivan.me</b> sites lives; the beams fly to where they really are. Green ring = every city agrees · amber = someone got a different answer · red = missing.</span>';
+    run.innerHTML = FL.feed.join('') + intro; // only our own strings + escaped hostnames
+    const len = run.textContent.length;
+    run.style.setProperty('--dur', Math.max(30, Math.round(len * 0.16)) + 's');
+  }
+  const flEsc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function flFeed(f, F) {
+    const ico = { operational: '✅', degraded: '⚠️', outage: '🚨', unknown: '❔' }[F.status] || '•';
+    const col = SC[F.status] || 'var(--down)';
+    const tgt = F.majState === 'ok' ? F.majority : 'no answer';
+    const https = F.probe ? (F.probe.up ? ` · HTTPS ${fmtMs(F.probe.ms)}` : ' · HTTPS down') : '';
+    flSay(`<span>${ico} <i style="color:${f.color}">${flEsc(f.host)}</i> → <b>${flEsc(tgt)}</b> · <i style="color:${col}">${F.agree || 0}/${F.reach || 0} locations agree</i>${https}</span>`);
+  }
+  async function flCycle(at) {
+    const up = FLEET.filter(f => S.fleet[f.id]?.status === 'operational').length;
+    const secs = ((Date.now() - at) / 1000).toFixed(1);
+    flSay(`<span>📡 <i style="color:#ffcc00">Sweep complete</i> · ${up}/${FLEET.length} sites healthy · ${FLEET.length * POINTS.length} lookups in ${secs} s · ${fmtTime(at)}</span>`);
+    FL.last = Date.now();
+    const ft = S.fleetTarget;
+    if (ft && ft.ips.length && FL.geoFor !== ft.ips[0]) {
+      FL.geoFor = ft.ips[0];
+      const cached = store.get('fleetgeo:' + ft.ips[0], null);
+      const g = cached || await geoOf(ft.ips[0]).catch(() => null);
+      if (g) {
+        if (!cached) store.set('fleetgeo:' + ft.ips[0], { lat: g.lat, lon: g.lon, city: g.city, country: g.country });
+        FL.target = { lat: g.lat, lon: g.lon, label: `${ft.name} · ${g.city || g.country || ''}`.replace(/ · $/, '') };
+        flSay(`<span>🎯 <i style="color:#ffcc00">Target located:</i> <b>${flEsc(ft.name)}</b> answers from ${flEsc(g.city || g.country || 'unknown')} (${flEsc(ft.ips[0])})</span>`);
+      }
+    }
+    flDrawTarget();
+  }
+  // satellite on a sinusoidal ground track (one pass ≈ 46 s) + radar sweep (8 s, 3 s while sweeping)
+  function flSatDraw(dt) {
+    const g = $('#fsat'); if (!g) return;
+    FL.satT = (FL.satT + dt / 46000) % 1;
+    const x = -40 + FL.satT * 1080, ph = x / 1000 * Math.PI * 2 * 1.25;
+    const y = 214 + 128 * Math.sin(ph), dy = 128 * Math.cos(ph) * Math.PI * 2 * 1.25 / 1000;
+    if (FL.trail.length && x < FL.trail[FL.trail.length - 1][0]) FL.trail = [];
+    FL.trail.push([x, y]); if (FL.trail.length > 90) FL.trail.shift();
+    if (!g.firstChild) {
+      g.innerHTML = '<path class="fsat-trail"/><ellipse class="fsat-foot" rx="46" ry="30"/>' +
+        '<g class="fsat-body"><rect x="-13" y="-3" width="9" height="6" rx="1" fill="#00c8ff" stroke="#00f0ff" stroke-width=".8"/>' +
+        '<rect x="4" y="-3" width="9" height="6" rx="1" fill="#00c8ff" stroke="#00f0ff" stroke-width=".8"/>' +
+        '<rect x="-4" y="-4.5" width="8" height="9" rx="1.6" fill="#ffcc00" stroke="#fff3b0" stroke-width=".6"/>' +
+        '<path d="M-3 -6.5Q0 -4.6 3 -6.5" stroke="#e0ffff" stroke-width="1.4" fill="none"/><circle cy="-7.6" r="1.2" fill="#ff00aa"/></g>';
+    }
+    const [trail, foot, body] = g.children;
+    trail.setAttribute('d', 'M' + FL.trail.filter((_, i) => i % 3 === 0 || i === FL.trail.length - 1).map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L'));
+    foot.setAttribute('cx', x.toFixed(1)); foot.setAttribute('cy', y.toFixed(1));
+    body.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(Math.atan(dy) * 180 / Math.PI).toFixed(1)}) scale(1.15)`);
+  }
+  function flFrame(now) {
+    FL.raf = 0;
+    if (!FL.visible || document.hidden || reduceMotion()) return;
+    const dt = Math.min(100, now - (FL.prevT || now)); FL.prevT = now;
+    const box = $('#fleetbox'), sweeping = !!S.fleetRunning;
+    box.classList.toggle('sweeping', sweeping);
+    const prevA = FL.sweepA;
+    FL.sweepA = (FL.sweepA + dt * 360 / (sweeping ? 3000 : 8000)) % 360;
+    const r = $('#flRadar'); if (r) r.style.transform = `translate(-50%,-50%) rotate(${FL.sweepA.toFixed(2)}deg)`;
+    for (const v of VANTAGE) {
+      const [x, y] = project(v.lat, v.lon);
+      const a = (Math.atan2(x - 500, -(y - 214)) * 180 / Math.PI + 360) % 360;
+      const crossed = prevA <= FL.sweepA ? (a > prevA && a <= FL.sweepA) : (a > prevA || a <= FL.sweepA);
+      if (crossed) flPing(v);
+    }
+    flSatDraw(dt);
+    FL.raf = requestAnimationFrame(flFrame);
+  }
+  function flKick() { if (!FL.raf && FL.visible && !document.hidden && !reduceMotion()) { FL.prevT = 0; FL.raf = requestAnimationFrame(flFrame); } }
+  function flInit() {
+    const box = $('#fleetbox'); if (!box) return;
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { FL.visible = es[0].isIntersecting; flKick(); }, { rootMargin: '120px' }).observe(box);
+    document.addEventListener('visibilitychange', flKick);
+    flDrawTarget(); flRenderCrawl();
+    setInterval(() => {
+      const ago = $('#flAgo'); if (!ago) return;
+      if (S.fleetRunning) ago.textContent = `◉ SWEEPING · ${FLEET.length * POINTS.length} LOOKUPS…`;
+      else if (FL.last) { const s = Math.round((Date.now() - FL.last) / 1000); ago.textContent = `last sweep ${s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + (s % 60) + ' s'} ago`; }
+    }, 1000);
+    flKick();
   }
 
   /* ======================= DNS Doctor ======================= */
@@ -2911,7 +3109,7 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   for (const f of FLEET) S.fleet[f.id] = { cells: {}, hist: store.get('fleet:' + f.host, []) };
   for (const v of VANTAGE) drawMarker(v.id, 'pending');
   drawFleetMarkers();
-  renderFleet(); renderWatch();
+  renderFleet(); renderWatch(); flInit();
   renderSecurity();
   loadMonitor(); setInterval(loadMonitor, 5 * 60 * 1000);
   const [d0, t0] = fromHash();
