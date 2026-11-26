@@ -3,14 +3,54 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mfGMXhJIn5tdceL/0kieC4zvd7/ksga6NDVF2RYMcew='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-zd2RHEyv+xg5B6I5Z6bluSCdGE2lWFcyB4D2dAdJHZw=' 'sha256-EIr/uIwCZATGyukaiAYZUxrtehNd8GmuDEszxG5WsEM='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://url-status.gerivan.me; manifest-src 'self'; worker-src 'self'; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <!-- 24/7 monitor data published by the url-status repository (https://url-status.gerivan.me/) (GitHub Actions). Edit this URL if you rename the repo. -->
 <meta name="monitor-data" content="https://raw.githubusercontent.com/gerivanc/url-status/data/">
 <meta name="description" content="Domain X-Ray: type any domain and get its registration, servers, networks, email security, certificates, attack surface and a security grade, plus live DNS propagation from around the world. 100% in the browser.">
-<meta name="theme-color" content="#0d001a">
 <title>Domain X-Ray &amp; DNS Status — gerivan.me</title>
-<link rel="icon" id="favicon" href="data:,">
+
+<!-- Favicon (satellite, the symbol of the project). The first one is redrawn live by the page with the current status color. -->
+<link rel="icon" id="favicon" type="image/svg+xml" href="https://url-status.gerivan.me/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://url-status.gerivan.me/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://url-status.gerivan.me/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://url-status.gerivan.me/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="256x256" href="https://url-status.gerivan.me/favicon-256x256.png">
+<link rel="shortcut icon" href="https://url-status.gerivan.me/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="https://url-status.gerivan.me/apple-touch-icon.png">
+<link rel="manifest" href="https://url-status.gerivan.me/site.webmanifest">
+
+<!-- PWA meta tags (single source of truth for theme color) -->
+<meta name="theme-color" content="#0d001a">
+<meta name="application-name" content="X-Ray">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="X-Ray">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="msapplication-TileColor" content="#0d001a">
+<meta name="msapplication-TileImage" content="https://url-status.gerivan.me/favicon-256x256.png">
+<link rel="canonical" href="https://url-status.gerivan.me/">
+
+<!-- Open Graph / social sharing preview -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="gerivan.me">
+<meta property="og:title" content="Domain X-Ray &amp; DNS Status — a personal satellite for any domain">
+<meta property="og:description" content="Registration, servers, email security, certificates, attack surface, a security grade and live DNS propagation for any domain. Zero backend, 100% in your browser.">
+<meta property="og:url" content="https://url-status.gerivan.me/">
+<meta property="og:image" content="https://url-status.gerivan.me/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Satellite icon of Domain X-Ray with the title DOMAIN X-RAY · LIVE DNS STATUS">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+
+<!-- Twitter Card preview -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Domain X-Ray &amp; DNS Status — a personal satellite for any domain">
+<meta name="twitter:description" content="Registration, servers, email security, certificates, attack surface, a security grade and live DNS propagation for any domain. Zero backend, 100% in your browser.">
+<meta name="twitter:image" content="https://url-status.gerivan.me/og-image.jpg">
+<meta name="twitter:image:alt" content="Satellite icon of Domain X-Ray with the title DOMAIN X-RAY · LIVE DNS STATUS">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -601,6 +641,52 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   .ans{max-width:170px}.container{padding:0 12px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ===== PWA install card (bilingual EN / PT-BR, follows the active theme) ===== */
+.pwa-card{position:fixed;z-index:60;right:22px;bottom:22px;width:min(400px,calc(100vw - 32px));padding:18px 18px 16px;border-radius:18px;
+  background:var(--panel2);color:var(--text);border:1px solid var(--line);
+  box-shadow:0 18px 48px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.03) inset,0 0 26px -8px var(--primary);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  transform:translateY(0);opacity:1;transition:transform .45s cubic-bezier(.2,.9,.25,1.2),opacity .35s}
+.pwa-card[hidden]{display:block;visibility:hidden;transform:translateY(calc(100% + 40px));opacity:0;pointer-events:none}
+.pwa-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(120deg,var(--primary),var(--accent),var(--secondary));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.75}
+.pwa-x{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:transparent;color:var(--mute);cursor:pointer;font-size:18px;line-height:1}
+.pwa-x:hover{background:var(--soft);color:var(--text)}
+.pwa-head{display:flex;gap:14px;align-items:center;padding-right:26px}
+.pwa-ico{position:relative;flex:0 0 64px;height:64px}
+.pwa-ico img{width:64px;height:64px;border-radius:15px;display:block;box-shadow:0 0 18px -4px var(--primary)}
+.pwa-ico .orb{position:absolute;inset:-7px;border:1.5px dashed var(--line);border-radius:50%;animation:pwa-spin 14s linear infinite}
+.pwa-ico .orb::after{content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.pwa-kick{font-family:var(--mono);font-size:11px;color:var(--label);letter-spacing:.5px}
+.pwa-title{font-family:var(--head);font-size:16px;font-weight:700;margin:2px 0 0;color:var(--primary);text-shadow:var(--glow);letter-spacing:.5px}
+.pwa-dev{font-size:12.5px;color:var(--mute);margin-top:2px}
+.pwa-msg{margin:12px 0 10px;font-size:14px;line-height:1.5}
+.pwa-howto{margin:-2px 0 10px;padding:8px 10px;border-radius:10px;background:var(--soft);border:1px dashed var(--line);font-size:13px}
+.pwa-howto[hidden]{display:none}
+.pwa-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;padding:0;list-style:none}
+.pwa-chips li{font-size:12px;padding:3px 9px;border-radius:20px;background:var(--soft);border:1px solid var(--line);color:var(--text)}
+.pwa-actions{display:flex;gap:8px;align-items:center}
+.pwa-actions .go{flex:1;height:40px;border:0;border-radius:10px;cursor:pointer;font-family:var(--head);font-size:13px;font-weight:700;letter-spacing:.6px;color:#140026;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 0 16px -4px var(--primary)}
+.pwa-actions .go:hover{filter:brightness(1.1)}
+.pwa-actions .later{height:40px;padding:0 14px;border-radius:10px;cursor:pointer;background:transparent;color:var(--mute);border:1px solid var(--line);font-size:13px}
+.pwa-actions .later:hover{color:var(--text);border-color:var(--primary)}
+.pwa-lang{display:inline-flex;margin-left:auto;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.pwa-lang button{border:0;background:transparent;color:var(--mute);font:600 11px var(--mono);padding:5px 9px;cursor:pointer}
+.pwa-lang button[aria-pressed="true"]{background:var(--primary);color:#140026}
+.pwa-card button:focus-visible,.btn.app:focus-visible{outline:2px dashed var(--secondary);outline-offset:2px}
+.btn.app[hidden]{display:none}
+.pwa-toast{position:fixed;z-index:61;left:50%;bottom:26px;transform:translate(-50%,0);padding:11px 18px;border-radius:30px;background:var(--panel2);border:1px solid var(--ok);color:var(--text);font-weight:600;box-shadow:0 0 22px -6px var(--ok);transition:opacity .4s,transform .4s}
+.pwa-toast[hidden]{display:block;opacity:0;transform:translate(-50%,30px);pointer-events:none}
+[data-theme="light"] .pwa-actions .go,[data-theme="light"] .pwa-lang button[aria-pressed="true"]{color:#fff}
+@keyframes pwa-spin{to{transform:rotate(360deg)}}
+@media (max-width:640px){
+  .pwa-card{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:auto;border-radius:20px}
+  .pwa-toast{bottom:calc(16px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px);text-align:center}
+}
+@media (display-mode:standalone){.btn.app{display:none}}
+@media (max-width:640px){.btn.app{padding:0 11px;gap:0}.btn.app .app-txt{display:none}}
 </style>
 </head>
 <body>
@@ -611,6 +697,7 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
     <div class="live-state" id="liveState" role="status" aria-live="polite"><span class="dot"></span><span class="txt" id="liveText">Starting monitor…</span></div>
     <div class="top-right">
       <button type="button" class="btn live" id="liveBtn" title="Auto-refresh countdown — click to check now (R)">↻ Live <b id="cd">--</b></button>
+      <button type="button" class="btn app" id="pwaApp" title="Install Domain X-Ray as an app" aria-label="Install Domain X-Ray as an app" hidden><span aria-hidden="true">⤓</span><span class="app-txt">App</span></button>
       <div class="themes" role="group" aria-label="Theme switcher">
         <button type="button" class="tbtn t-cyber" data-theme="cyber" title="Cyber theme" aria-label="Cyber theme" aria-pressed="true">🔷</button>
         <button type="button" class="tbtn t-light" data-theme="light" title="Light theme" aria-label="Light theme" aria-pressed="false">☀️</button>
@@ -864,6 +951,31 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
     </div>
   </div>
 </footer>
+
+<!-- PWA install card (bilingual EN / PT-BR). Shown by the PWA script at the end of this page. -->
+<aside class="pwa-card" id="pwaCard" role="dialog" aria-modal="false" aria-labelledby="pwaTitle" aria-describedby="pwaMsg" hidden>
+  <button type="button" class="pwa-x" id="pwaClose" aria-label="Close" title="Close">✕</button>
+  <div class="pwa-head">
+    <div class="pwa-ico" aria-hidden="true"><span class="orb"></span><img src="https://url-status.gerivan.me/apple-touch-icon.png" alt="" width="64" height="64"></div>
+    <div>
+      <div class="pwa-kick" id="pwaKick">// ground station → satellite</div>
+      <h2 class="pwa-title" id="pwaTitle">Install the satellite</h2>
+      <div class="pwa-dev" id="pwaDev">💻 on this laptop</div>
+    </div>
+  </div>
+  <p class="pwa-msg" id="pwaMsg">Do you want to install Domain X-Ray as an app on this device? It opens in its own window and launches even without a connection.</p>
+  <p class="pwa-howto" id="pwaHowto" hidden></p>
+  <ul class="pwa-chips" id="pwaChips"><li>🪟 Own window</li><li>⚡ Instant launch</li><li>🔒 Zero backend</li></ul>
+  <div class="pwa-actions">
+    <button type="button" class="go" id="pwaGo">INSTALL</button>
+    <button type="button" class="later" id="pwaLater">Not now</button>
+    <div class="pwa-lang" role="group" aria-label="Language / Idioma">
+      <button type="button" data-lang="en" aria-pressed="true" lang="en" title="English">EN</button>
+      <button type="button" data-lang="pt" aria-pressed="false" lang="pt-BR" title="Português">PT</button>
+    </div>
+  </div>
+</aside>
+<div class="pwa-toast" id="pwaToast" role="status" aria-live="polite" hidden></div>
 
 <script>
 'use strict';
@@ -1491,11 +1603,25 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   /* ======================= rendering ======================= */
   const setTile = (id, v, f, color) => { const t = $('#' + id); t.querySelector('.v').textContent = v; t.querySelector('.f').textContent = f; t.querySelector('.f').title = f; t.style.setProperty('--tc', color); };
   function setFavicon(color) {
+    // Live favicon: the project satellite, with its signal and status light painted in the current status color.
     const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
-    g.fillStyle = '#0d001a'; g.beginPath(); g.arc(32, 32, 31, 0, 7); g.fill();
-    g.strokeStyle = '#00f0ff'; g.lineWidth = 3; g.beginPath(); g.arc(32, 32, 27, 0, 7); g.stroke();
-    g.fillStyle = cssVar(color); g.beginPath(); g.arc(32, 32, 16, 0, 7); g.fill();
-    $('#favicon').href = c.toDataURL('image/png');
+    const col = cssVar(color), rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+    const bg = g.createLinearGradient(0, 0, 64, 64); bg.addColorStop(0, '#2a0040'); bg.addColorStop(.55, '#14002b'); bg.addColorStop(1, '#050510');
+    g.fillStyle = bg; rr(0, 0, 64, 64, 15); g.fill();
+    g.save(); g.translate(31.1, 34); g.scale(.145, .145); g.rotate(-35 * Math.PI / 180);
+    const panel = g.createLinearGradient(0, -46, 0, 46); panel.addColorStop(0, '#00f0ff'); panel.addColorStop(1, '#0066ff');
+    g.fillStyle = '#8ffcff'; rr(-64, -7, 128, 14, 4); g.fill();
+    g.lineWidth = 10; g.strokeStyle = '#00f0ff'; g.fillStyle = panel;
+    rr(-182, -46, 122, 92, 10); g.fill(); g.stroke(); rr(60, -46, 122, 92, 10); g.fill(); g.stroke();
+    const body = g.createLinearGradient(-44, -56, 44, 56); body.addColorStop(0, '#fff07a'); body.addColorStop(.5, '#ffcc00'); body.addColorStop(1, '#d98e00');
+    g.fillStyle = body; g.strokeStyle = '#fff3b0'; g.lineWidth = 6; rr(-44, -56, 88, 112, 18); g.fill(); g.stroke();
+    g.fillStyle = '#ffcc00'; rr(-6, -92, 12, 40, 5); g.fill();
+    g.fillStyle = '#e0ffff'; g.strokeStyle = '#00f0ff'; g.beginPath(); g.moveTo(-46, -96); g.quadraticCurveTo(0, -66, 46, -96); g.quadraticCurveTo(0, -112, -46, -96); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+    g.strokeStyle = col; g.lineWidth = 3.8; g.lineCap = 'round'; g.beginPath(); g.arc(22.1, 21.2, 10.4, 196 * Math.PI / 180, 254 * Math.PI / 180); g.stroke();
+    g.fillStyle = col; g.strokeStyle = '#0d001a'; g.lineWidth = 3; g.beginPath(); g.arc(53, 53, 8, 0, 7); g.fill(); g.stroke();
+    const url = c.toDataURL('image/png');
+    document.querySelectorAll('link[rel~="icon"]').forEach((l) => { l.type = 'image/png'; l.removeAttribute('sizes'); l.href = url; });
   }
   function renderSummary() {
     const L = S.last, sm = SM[L.status];
@@ -1603,7 +1729,8 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   function fromHash() {
     const m = decodeURIComponent(location.hash.slice(1)).match(/^([A-Za-z]+)\/(.+)$/);
     const type = m && TYPES[m[1].toUpperCase()] ? m[1].toUpperCase() : 'NS';
-    const domain = (m && sanitizeDomain(m[2])) || sanitizeDomain(new URLSearchParams(location.search).get('domain')) || 'gerivan.me';
+    const qs = new URLSearchParams(location.search), shared = (k) => { const u = /https?:\/\/[^\s/?#]+/i.exec(qs.get(k) || ''); return u ? sanitizeDomain(u[0]) : sanitizeDomain(qs.get(k)); };
+    const domain = (m && sanitizeDomain(m[2])) || sanitizeDomain(qs.get('domain')) || shared('text') || shared('title') || 'gerivan.me';
     return [domain, type];
   }
 
@@ -2736,6 +2863,255 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
   loadMonitor(); setInterval(loadMonitor, 5 * 60 * 1000);
   const [d0, t0] = fromHash();
   startMonitor(d0, t0, false);
+})();
+</script>
+<script>
+/*
+ * Progressive Web App (PWA) support
+ * ---------------------------------
+ * 1. Registers the service worker (sw.js) so the satellite can be installed
+ *    and its shell launches even offline.
+ * 2. Shows a floating, bilingual (English / Brazilian Portuguese) card asking
+ *    whether the visitor wants to install the app on this laptop/desktop or
+ *    smartphone/tablet. The language follows the browser and can be switched
+ *    on the card (EN / PT); the choice is remembered.
+ *      - Chromium browsers (Chrome, Edge, Opera, Samsung Internet, Brave...):
+ *        uses the native install prompt captured from `beforeinstallprompt`.
+ *      - iOS / iPadOS: no install API, so the card explains "Share → Add to
+ *        Home Screen".
+ *      - Safari on macOS: explains "File → Add to Dock".
+ *      - Other browsers without the install API (e.g. Firefox): explains how
+ *        to install from the browser menu.
+ * 3. Never shows the card when the app is already running installed
+ *    (standalone), remembers "Not now" for 7 days, and keeps an "App" button
+ *    in the header so the visitor can open the card again at any time.
+ */
+(function () {
+    'use strict';
+
+    const DISMISS_KEY = 'dnsstatus:pwa-dismissed-at';
+    const LANG_KEY = 'dnsstatus:pwa-lang';
+    const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+    const SHOW_DELAY_MS = 6000;                 // let the first scan land before asking
+    const APP_ORIGIN = 'https://url-status.gerivan.me';
+
+    const T = {
+        en: {
+            kick: '// ground station → satellite',
+            title: 'Install the satellite',
+            dev: { laptop: '💻 on this laptop or desktop', phone: '📱 on this smartphone', tablet: '📱 on this tablet' },
+            msg: 'Do you want to install Domain X-Ray as an app on this device? It opens in its own window and launches even without a connection.',
+            chips: ['🪟 Own window', '⚡ Instant launch', '🔒 Zero backend'],
+            install: 'INSTALL', gotIt: 'GOT IT', later: 'Not now', close: 'Close', app: 'App',
+            appTitle: 'Install Domain X-Ray as an app',
+            howto: {
+                ios: 'To install: tap the Share button <b>⬆︎</b>, then <b>“Add to Home Screen”</b>.',
+                macSafari: 'To install: in the Safari menu bar choose <b>File → “Add to Dock”</b>.',
+                manual: 'To install: open your browser menu and choose <b>“Install app”</b> or <b>“Add to Home screen”</b> (if available).'
+            },
+            installed: '🛰️ Satellite in orbit! Find Domain X-Ray among your apps.'
+        },
+        pt: {
+            kick: '// estação terrestre → satélite',
+            title: 'Instale o satélite',
+            dev: { laptop: '💻 neste laptop ou computador', phone: '📱 neste smartphone', tablet: '📱 neste tablet' },
+            msg: 'Deseja instalar o Domain X-Ray como aplicativo neste dispositivo? Ele abre em janela própria e inicia mesmo sem conexão.',
+            chips: ['🪟 Janela própria', '⚡ Abre na hora', '🔒 Zero servidor'],
+            install: 'INSTALAR', gotIt: 'ENTENDI', later: 'Agora não', close: 'Fechar', app: 'App',
+            appTitle: 'Instalar o Domain X-Ray como aplicativo',
+            howto: {
+                ios: 'Para instalar: toque no botão Compartilhar <b>⬆︎</b> e depois em <b>“Adicionar à Tela de Início”</b>.',
+                macSafari: 'Para instalar: na barra de menus do Safari escolha <b>Arquivo → “Adicionar ao Dock”</b>.',
+                manual: 'Para instalar: abra o menu do navegador e escolha <b>“Instalar app”</b> ou <b>“Adicionar à tela inicial”</b> (se disponível).'
+            },
+            installed: '🛰️ Satélite em órbita! Procure o Domain X-Ray entre os seus aplicativos.'
+        }
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const card = $('pwaCard');
+    const goBtn = $('pwaGo');
+    const laterBtn = $('pwaLater');
+    const closeBtn = $('pwaClose');
+    const appBtn = $('pwaApp');
+    const toast = $('pwaToast');
+
+    let deferredPrompt = null; // Saved `beforeinstallprompt` event
+    let mode = null;           // 'prompt' | 'ios' | 'macSafari' | 'manual'
+    let lastFocus = null;
+
+    // Storage may be unavailable (private mode, blocked site data).
+    function storageGet(key) { try { return window.localStorage.getItem(key); } catch (e) { return null; } }
+    function storageSet(key, value) { try { window.localStorage.setItem(key, value); } catch (e) { /* ignore */ } }
+
+    function isStandalone() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+               window.matchMedia('(display-mode: minimal-ui)').matches ||
+               window.navigator.standalone === true; // iOS Safari
+    }
+    function recentlyDismissed() {
+        const at = Number(storageGet(DISMISS_KEY));
+        return Number.isFinite(at) && at > 0 && (Date.now() - at) < SNOOZE_MS;
+    }
+    function rememberDismissal() { storageSet(DISMISS_KEY, String(Date.now())); }
+
+    function isIOS() {
+        const ua = navigator.userAgent || '';
+        // iPadOS 13+ reports itself as "Macintosh" but has touch support.
+        return /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    }
+    function isMacSafari() {
+        const ua = navigator.userAgent || '';
+        return /Macintosh/.test(ua) && /Safari\//.test(ua) &&
+               !/Chrome|Chromium|CriOS|Edg|OPR|Firefox|FxiOS/.test(ua) && navigator.maxTouchPoints <= 1;
+    }
+    function deviceKind() {
+        const ua = navigator.userAgent || '';
+        if (/iPad|Tablet/.test(ua) || (/Android/.test(ua) && !/Mobile/.test(ua)) ||
+            (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return 'tablet';
+        if (/Mobi|iPhone|iPod|Android/.test(ua)) return 'phone';
+        return 'laptop';
+    }
+
+    const storedLang = storageGet(LANG_KEY);
+    const browserLang = ((navigator.languages && navigator.languages[0]) || navigator.language || 'en').toLowerCase();
+    let lang = storedLang === 'pt' || storedLang === 'en' ? storedLang : (browserLang.startsWith('pt') ? 'pt' : 'en');
+
+    function render() {
+        if (!card) return;
+        const t = T[lang];
+        card.lang = lang === 'pt' ? 'pt-BR' : 'en';
+        $('pwaKick').textContent = t.kick;
+        $('pwaTitle').textContent = t.title;
+        $('pwaDev').textContent = t.dev[deviceKind()];
+        $('pwaMsg').textContent = t.msg;
+        const chips = $('pwaChips');
+        chips.replaceChildren(...t.chips.map((c) => { const li = document.createElement('li'); li.textContent = c; return li; }));
+        const howto = $('pwaHowto');
+        if (mode && mode !== 'prompt') {
+            howto.innerHTML = t.howto[mode] || t.howto.manual; // static, trusted strings only
+            howto.hidden = false;
+            goBtn.textContent = t.gotIt;
+        } else {
+            howto.hidden = true;
+            goBtn.textContent = t.install;
+        }
+        laterBtn.textContent = t.later;
+        closeBtn.setAttribute('aria-label', t.close);
+        closeBtn.title = t.close;
+        card.querySelectorAll('.pwa-lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+        if (appBtn) { appBtn.title = t.appTitle; appBtn.setAttribute('aria-label', t.appTitle); }
+    }
+
+    function availableMode() {
+        if (isStandalone()) return null;
+        if (deferredPrompt) return 'prompt';
+        if (isIOS()) return 'ios';
+        if (isMacSafari()) return 'macSafari';
+        if (!('onbeforeinstallprompt' in window)) return 'manual';
+        return null; // Chromium without the event: already installed or not installable
+    }
+
+    function refreshAppButton() {
+        if (appBtn) appBtn.hidden = !availableMode();
+    }
+
+    function showCard(force) {
+        if (!card || isStandalone()) return;
+        if (!force && recentlyDismissed()) return;
+        mode = availableMode();
+        if (!mode) return;
+        render();
+        lastFocus = document.activeElement;
+        card.hidden = false;
+        if (force) goBtn.focus({ preventScroll: true });
+    }
+
+    function hideCard(remember) {
+        if (!card || card.hidden) return;
+        if (remember) rememberDismissal();
+        card.hidden = true;
+        if (lastFocus && card.contains(document.activeElement)) lastFocus.focus({ preventScroll: true });
+    }
+
+    function showToast(text) {
+        if (!toast) return;
+        toast.textContent = text;
+        toast.hidden = false;
+        setTimeout(() => { toast.hidden = true; }, 5000);
+    }
+
+    // 1. Service worker registration (HTTPS or localhost, and only on the
+    //    app's own origin: mirrors of this page must not try to register it).
+    const manifestLink = document.querySelector('link[rel="manifest"]');
+    const ownOrigin = location.origin === APP_ORIGIN ||
+        (manifestLink && new URL(manifestLink.href, location.href).origin === location.origin) ||
+        /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    if ('serviceWorker' in navigator && window.isSecureContext && ownOrigin) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js', { scope: './' })
+                .catch((err) => console.warn('url-status: service worker registration failed:', err));
+        });
+    }
+
+    if (!card) return;
+    render();
+
+    // Language switch (EN / PT), remembered.
+    card.querySelectorAll('.pwa-lang button').forEach((b) => b.addEventListener('click', () => {
+        lang = b.dataset.lang === 'pt' ? 'pt' : 'en';
+        storageSet(LANG_KEY, lang);
+        render();
+    }));
+
+    // 2a. Chromium-based browsers: capture the native install prompt.
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault(); // Show our bilingual card instead of the mini-infobar
+        deferredPrompt = event;
+        refreshAppButton();
+        if (!card.hidden) { mode = 'prompt'; render(); }
+    });
+
+    goBtn.addEventListener('click', async () => {
+        if (mode === 'prompt' && deferredPrompt) {
+            const promptEvent = deferredPrompt;
+            deferredPrompt = null; // The prompt can only be used once
+            hideCard(false);
+            try {
+                await promptEvent.prompt();
+                const choice = await promptEvent.userChoice;
+                if (choice && choice.outcome === 'dismissed') rememberDismissal();
+            } catch (err) {
+                console.warn('url-status: install prompt failed:', err);
+            }
+            refreshAppButton();
+        } else {
+            hideCard(true); // Instruction-only modes: the visitor has read how to install.
+        }
+    });
+    laterBtn.addEventListener('click', () => hideCard(true));
+    closeBtn.addEventListener('click', () => hideCard(true));
+    if (appBtn) appBtn.addEventListener('click', () => (card.hidden ? showCard(true) : hideCard(false)));
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !card.hidden) hideCard(true);
+    });
+
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        hideCard(false);
+        refreshAppButton();
+        showToast(T[lang].installed);
+    });
+
+    // 2b. Show the card a few seconds after load (native prompt or instructions).
+    window.addEventListener('load', () => {
+        refreshAppButton();
+        setTimeout(() => {
+            refreshAppButton();
+            if (card.hidden) showCard(false);
+        }, SHOW_DELAY_MS);
+    });
 })();
 </script>
 </body>
