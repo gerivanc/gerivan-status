@@ -745,6 +745,57 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
 }
 @media (display-mode:standalone){.btn.app{display:none}}
 @media (max-width:640px){.btn.app{padding:0 11px;gap:0}.btn.app .app-txt{display:none}}
+/* ---------- footer · MTA-STS postage stamp → mta-sts.gerivan.me ---------- */
+.mts-stamp{--mts-ink:var(--accent);--mts-glow:rgba(0,240,255,.45);position:relative;display:inline-flex;flex:none;color:var(--text);text-decoration:none;transform:rotate(-2.5deg);transition:transform .35s cubic-bezier(.2,1.4,.4,1),filter .35s;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45)) drop-shadow(0 0 10px var(--mts-glow))}
+[data-theme="light"] .mts-stamp{--mts-glow:rgba(0,102,255,.18)}
+[data-theme="matrix"] .mts-stamp{--mts-glow:rgba(0,255,159,.4)}
+.mts-stamp:hover,.mts-stamp:focus-visible{text-decoration:none;text-shadow:none;transform:rotate(0) translateY(-4px) scale(1.03);filter:drop-shadow(0 12px 22px rgba(0,0,0,.5)) drop-shadow(0 0 18px var(--mts-glow))}
+.mts-stamp:focus-visible{outline:none}
+.mts-stamp:focus-visible .mts-perf{outline:2px solid var(--secondary);outline-offset:-6px}
+/* perforated edge: solid content-box + a ring of punched holes */
+.mts-perf{display:flex;align-items:center;gap:12px;padding:9px;background:linear-gradient(135deg,var(--soft),transparent 60%),var(--panel2);-webkit-mask:linear-gradient(#000 0 0) content-box,radial-gradient(circle 4.5px,#0000 96%,#000) -6px -6px/13px 13px round;mask:linear-gradient(#000 0 0) content-box,radial-gradient(circle 4.5px,#0000 96%,#000) -6px -6px/13px 13px round}
+[data-theme="light"] .mts-perf{background:linear-gradient(135deg,#eaf3ff,#fff 60%)}
+.mts-face{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border:1px dashed var(--gold-line);border-radius:4px;background:repeating-linear-gradient(-45deg,transparent 0 9px,var(--soft) 9px 10px)}
+.mts-seal{width:92px;height:92px;flex:none;overflow:visible}
+.mts-seal .ring{transform-origin:60px 60px;animation:mtsSpin 22s linear infinite}
+.mts-stamp:hover .mts-seal .ring{animation-duration:6s}
+.mts-seal .ring text{font-family:var(--mono);font-size:8.6px;font-weight:600;letter-spacing:.4px;fill:var(--primary)}
+.mts-seal .rim{fill:none;stroke:var(--gold-line);stroke-width:1}
+.mts-seal .core{fill:var(--bg2);stroke:var(--primary);stroke-width:1.4}
+.mts-seal .env{fill:none;stroke:var(--primary);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.mts-seal .lock{fill:var(--secondary)}
+.mts-seal .shackle{fill:none;stroke:var(--secondary);stroke-width:2.2;stroke-linecap:round}
+.mts-seal .keyhole{fill:var(--bg2)}
+@keyframes mtsSpin{to{transform:rotate(360deg)}}
+.mts-txt{display:flex;flex-direction:column;gap:3px;min-width:0;text-align:left}
+.mts-kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.6px;color:var(--label);opacity:.9}
+.mts-name{font-family:var(--head);font-size:20px;font-weight:900;letter-spacing:1.5px;line-height:1.05;color:var(--primary);text-shadow:var(--glow)}
+.mts-name small{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.3px;color:var(--mute);text-shadow:none}
+.mts-sub{font-size:12px;color:var(--mute);max-width:230px;line-height:1.3}
+.mts-sub b{color:var(--text)}
+/* the encrypted tunnel: an envelope rides from sender to the pinned MX */
+.mts-tunnel{position:relative;display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.5px;color:var(--mute)}
+.mts-pipe{position:relative;flex:1;height:12px;min-width:90px;border:1px solid var(--line);border-radius:7px;background:repeating-linear-gradient(90deg,var(--soft) 0 6px,transparent 6px 12px);overflow:hidden}
+.mts-pipe::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--mts-glow),transparent);transform:translateX(-100%);animation:mtsScan 2.6s ease-in-out infinite}
+.mts-pipe i{position:absolute;top:50%;left:0;font-style:normal;font-size:10px;line-height:1;color:var(--secondary);transform:translate(-120%,-52%);animation:mtsRide 3.2s cubic-bezier(.45,0,.55,1) infinite}
+.mts-stamp:hover .mts-pipe i{animation-duration:1.4s}
+.mts-tunnel .mx{color:var(--ok)}
+@keyframes mtsRide{0%{left:0;transform:translate(-120%,-52%)}100%{left:100%;transform:translate(20%,-52%)}}
+@keyframes mtsScan{to{transform:translateX(100%)}}
+.mts-cta{font-family:var(--mono);font-size:10.5px;color:var(--link);letter-spacing:.5px;margin-top:2px;transition:letter-spacing .25s}
+.mts-stamp:hover .mts-cta{letter-spacing:1.1px}
+/* postmark: slams onto the stamp on hover */
+.mts-pm{position:absolute;top:-12px;right:-14px;width:66px;height:66px;pointer-events:none;color:var(--mts-ink);opacity:.82;transform:rotate(-16deg);mix-blend-mode:screen}
+[data-theme="light"] .mts-pm{mix-blend-mode:multiply}
+.mts-pm svg{width:100%;height:100%;overflow:visible}
+.mts-pm circle{fill:none;stroke:currentColor}
+.mts-pm path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.mts-pm text{fill:currentColor;font-family:var(--head);text-anchor:middle}
+.mts-stamp:hover .mts-pm,.mts-stamp:focus-visible .mts-pm{animation:mtsSlam .5s cubic-bezier(.2,1.5,.4,1)}
+@keyframes mtsSlam{0%{transform:rotate(-40deg) scale(1.9);opacity:0}60%{opacity:.95}100%{transform:rotate(-16deg) scale(1);opacity:.82}}
+.foot-meta .mts-stamp{margin:14px 14px 4px 0}
+@media (max-width:760px){.foot-meta .mts-stamp{transform:none;margin:16px 10px 4px}.mts-sub{max-width:none}}
+@media (max-width:420px){.mts-seal{width:72px;height:72px}.mts-name{font-size:17px}.mts-pm{right:-6px}}
 </style>
 </head>
 <body>
@@ -1019,6 +1070,42 @@ footer .foot-main{align-items:center;padding-top:10px;padding-bottom:22px}
       <div><div class="name">gerivan.me <span>status</span></div><div class="tag">Domain X-Ray · Live DNS Propagation &amp; Status Monitor · 24/7/365</div><div class="home">↩ Return to base · gerivan.me</div></div>
     </a>
     <div class="foot-meta">
+      <!-- MTA-STS postage stamp · links to the mta-sts.gerivan.me gateway (pure HTML/CSS, no script: CSP stays hash-locked) -->
+      <a class="mts-stamp" href="https://mta-sts.gerivan.me/" target="_blank" rel="noopener noreferrer" aria-label="MTA-STS for gerivan.me: every email to @gerivan.me travels inside an encrypted tunnel. Opens mta-sts.gerivan.me in a new tab" title="Postmarked by MTA-STS · open the gateway at mta-sts.gerivan.me">
+        <span class="mts-perf">
+          <span class="mts-face">
+            <svg class="mts-seal" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <defs><path id="mtsRingPath" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs>
+              <circle class="rim" cx="60" cy="60" r="56"/>
+              <g class="ring"><text><textPath href="#mtsRingPath" textLength="292" lengthAdjust="spacing">MTA-STS ✦ RFC 8461 ✦ TLS-RPT ✦ RFC 8460 ✦</textPath></text></g>
+              <circle class="core" cx="60" cy="60" r="34"/>
+              <rect class="env" x="41" y="47" width="36" height="25" rx="3"/>
+              <path class="env" d="M42 49 L59 62 L76 49"/>
+              <path class="shackle" d="M70 69 v-4.5 a5.5 5.5 0 0 1 11 0 v4.5"/>
+              <rect class="lock" x="66.5" y="68" width="18" height="14" rx="2.5"/>
+              <circle class="keyhole" cx="75.5" cy="74" r="2"/>
+              <rect class="keyhole" x="74.6" y="74.5" width="1.8" height="4.2" rx=".9"/>
+            </svg>
+            <span class="mts-txt">
+              <span class="mts-kick">// certified mail</span>
+              <span class="mts-name">MTA-STS <small>· gerivan.me</small></span>
+              <span class="mts-sub">Every email to <b>@gerivan.me</b> rides an encrypted tunnel.</span>
+              <span class="mts-tunnel" aria-hidden="true"><span>SMTP</span><span class="mts-pipe"><i>✉</i></span><span class="mx">MX ✓</span></span>
+              <span class="mts-cta">↗ open the gateway</span>
+            </span>
+          </span>
+        </span>
+        <span class="mts-pm" aria-hidden="true">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="30" stroke-width="2.2"/>
+            <circle cx="40" cy="40" r="25" stroke-width=".9"/>
+            <text x="40" y="38" font-size="15" font-weight="900">A+</text>
+            <text x="40" y="49" font-size="7.5" font-weight="700">99/100</text>
+            <text x="40" y="58" font-size="5" font-weight="500" letter-spacing=".6">27·XI·2026</text>
+            <path d="M-14 30 q6 -4 12 0 t12 0 M-14 40 q6 -4 12 0 t12 0 M-14 50 q6 -4 12 0 t12 0"/>
+          </svg>
+        </span>
+      </a>
       <span>© <span id="yr"></span> <b>Gerivan Costa dos Santos</b> · <a href="https://gerivan.me/" id="homeLink">gerivan.me</a></span>
       <span><kbd>/</kbd> X-Ray · <kbd>R</kbd> refresh · <kbd>E</kbd> export · link format: <code>#A/example.com</code></span>
     </div>
