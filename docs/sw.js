@@ -3,7 +3,7 @@
  * Copyright © 2026 Gerivan Costa dos Santos
  * GitHub: https://github.com/gerivanc/url-status
  * MIT License: https://github.com/gerivanc/url-status/blob/main/LICENSE
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * Purpose:
  *   - Makes the satellite installable as a Progressive Web App (browsers
@@ -24,7 +24,7 @@
 'use strict';
 
 // Bump this value on every release so old caches are discarded.
-const CACHE_VERSION = 'url-status-v1.0.2';
+const CACHE_VERSION = 'url-status-v1.0.3';
 
 // Core application shell. Required entries must exist or installation fails.
 const REQUIRED_ASSETS = [
